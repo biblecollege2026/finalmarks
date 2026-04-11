@@ -151,15 +151,54 @@
         const btn = document.getElementById('downloadBtn');
         btn.innerText = "⌛ Processing...";
 
+        // Save original styles
+        const originalWidth   = element.style.width;
+        const originalPadding = element.style.padding;
+        const originalBox     = element.style.boxSizing;
+        const originalBorder  = element.style.borderRadius;
+        const originalShadow  = element.style.boxShadow;
+        const originalOverflow = element.style.overflow;
+
+        // Lock to A4 pixel width (794px at 96dpi) so html2canvas captures everything
+        element.style.width       = '754px';   // 794px minus 2×20px margin
+        element.style.padding     = '12px 16px';
+        element.style.boxSizing   = 'border-box';
+        element.style.borderRadius = '0';
+        element.style.boxShadow   = 'none';
+        element.style.overflow    = 'visible';
+
         const opt = {
-            margin: [5, 5, 5, 5],
+            margin: [10, 20, 10, 20],
             filename: `Marksheet_${name}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                scrollX: 0,
+                scrollY: 0,
+                width: 754,
+                windowWidth: 794
+            },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
         html2pdf().set(opt).from(element).save().then(() => {
+            // Restore original styles
+            element.style.width        = originalWidth;
+            element.style.padding      = originalPadding;
+            element.style.boxSizing    = originalBox;
+            element.style.borderRadius = originalBorder;
+            element.style.boxShadow    = originalShadow;
+            element.style.overflow     = originalOverflow;
+            btn.innerText = "📥 DOWNLOAD PDF";
+        }).catch(() => {
+            element.style.width        = originalWidth;
+            element.style.padding      = originalPadding;
+            element.style.boxSizing    = originalBox;
+            element.style.borderRadius = originalBorder;
+            element.style.boxShadow    = originalShadow;
+            element.style.overflow     = originalOverflow;
             btn.innerText = "📥 DOWNLOAD PDF";
         });
     };
@@ -222,7 +261,7 @@
                 <button id="downloadBtn" onclick="window.downloadMarksheet()" style="padding:8px 16px;background:#27ae60;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">📥 DOWNLOAD PDF</button>
             </div>
 
-            <div id="marksheet-to-print" style="background:white;width:100%;padding:12px 16px;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);font-family:sans-serif;font-size:11px;box-sizing:border-box;">
+            <div id="marksheet-to-print" style="background:white;width:100%;max-width:754px;margin:0 auto;padding:12px 16px;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);font-family:sans-serif;font-size:11px;box-sizing:border-box;overflow:visible;">
 
                 <!-- COLLEGE HEADER -->
                 <div style="text-align:center;margin-bottom:5px;border-bottom:2px solid #1e3c72;padding-bottom:4px;">
