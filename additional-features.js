@@ -297,7 +297,7 @@
                 </table>
 
                 <!-- ── NEW TESTAMENT TABLE ── -->
-                <h3 style="color: #2196f3; border-left: 5px solid #2196f3; padding-left: 12px; margin-bottom: 10px; font-size: 1.1em; text-transform: uppercase; letter-spacing: 0.5px;">
+                <br><br><br><br><h3 style="color: #2196f3; border-left: 5px solid #2196f3; padding-left: 12px; margin-bottom: 10px; font-size: 1.1em; text-transform: uppercase; letter-spacing: 0.5px;">
                     📘 New Testament Results
                 </h3>
                 <table style="width: 100%; border-collapse: collapse; font-family: sans-serif; margin-bottom: 30px;">
