@@ -151,11 +151,21 @@
         const btn = document.getElementById('downloadBtn');
         btn.innerText = "⌛ Processing...";
 
-        window.scrollTo(0, 0);
+        // Save original styles
+        const origStyle = element.getAttribute('style');
+
+        // Temporarily override styles so element renders like a standalone A4 page
+        element.style.position = 'fixed';
+        element.style.top = '0';
+        element.style.left = '0';
+        element.style.width = '794px';
+        element.style.zIndex = '-9999';
+        element.style.borderRadius = '0';
+        element.style.boxShadow = 'none';
 
         const opt = {
-            margin: [5, 5, 5, 5],
-            filename: `Marksheet_${name}.pdf`,
+            margin: [8, 8, 8, 8],
+            filename: 'Marksheet_' + name + '.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: {
                 scale: 2,
@@ -163,13 +173,18 @@
                 allowTaint: true,
                 scrollX: 0,
                 scrollY: 0,
-                windowWidth: element.scrollWidth,
-                windowHeight: element.scrollHeight
+                width: 794,
+                windowWidth: 794
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
         html2pdf().set(opt).from(element).save().then(() => {
+            // Restore original styles
+            element.setAttribute('style', origStyle);
+            btn.innerText = "📥 DOWNLOAD PDF";
+        }).catch(() => {
+            element.setAttribute('style', origStyle);
             btn.innerText = "📥 DOWNLOAD PDF";
         });
     };
