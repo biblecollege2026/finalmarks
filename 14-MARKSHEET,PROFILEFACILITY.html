@@ -609,52 +609,60 @@
         }
 
 
-      @media print {
-    /* 1. Global Print Settings */
-    body {
-        background: white !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        zoom: 95%; /* Helps fit content on A4 */
-    }
+@media print {
+            @page {
+                size: A4;
+                margin: 0.3cm;
+            }
+            
+            body * {
+                visibility: hidden !important;
+            }
+            
+            /* Add #print-container and its children to the visible elements */
+            #marksheet-to-print,
+            #marksheet-to-print *,
+            #print-container, /* ADD THIS LINE */
+            #print-container * { /* ADD THIS LINE */
+                visibility: visible !important;
+            }
+            
+            #marksheet-to-print {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                padding: 10px !important;
+                display: block !important;
+            }
 
-    /* 2. Prevent Splitting Rows and Cards */
-    table, 
-    .summary-card, 
-    .student-card,
-    #nt-marks-table-body tr {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-    }
+            /* Ensure print-container is positioned and displayed for printing */
+            #print-container { /* ADD THIS BLOCK */
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                /* If you want multi-page printing, do NOT add max-height and overflow: hidden here. 
+                   Browsers generally handle pagination of block content well. */
+                padding: 10px !important; 
+                display: block !important;
+            }
+            
+            .print-page {
+                page-break-after: avoid !important; 
+                page-break-inside: avoid !important;
+                display: block !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
 
-    /* 3. Layout Positioning */
-    #print-container, 
-    #marksheet-to-print {
-        position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
-        width: 100% !important;
-        display: block !important;
-        padding: 10px !important;
-        /* REMOVED max-height and overflow: hidden to allow multiple pages */
-    }
-
-    /* 4. Ensure the container doesn't force a single-page crop */
-    .container {
-        box-shadow: none !important;
-        border: none !important;
-        width: 100% !important;
-        max-width: none !important;
-    }
-
-    /* 5. Clean up extra pages */
-    .print-page {
-        page-break-after: auto !important;
-        page-break-inside: avoid !important;
-        display: block !important;
-    }
-}
-
+            /* This forces the browser to shrink the content to fit one page */
+            /* This rule on #marksheet-to-print might interfere if your marksheet is also multi-page. */
+            #marksheet-to-print {
+                max-height: 98vh;
+                overflow: hidden;
+            }
+        }
 
         @media (max-width: 768px) {
             .pdf-cards {
