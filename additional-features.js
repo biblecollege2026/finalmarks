@@ -155,7 +155,7 @@
             margin: [5, 5, 5, 5],
             filename: `Marksheet_${name}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 1.5, useCORS: true, windowWidth: 780 },
+            html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
@@ -222,7 +222,7 @@
                 <button id="downloadBtn" onclick="window.downloadMarksheet()" style="padding:8px 16px;background:#27ae60;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">📥 DOWNLOAD PDF</button>
             </div>
 
-            <div id="marksheet-to-print" style="background:white;width:750px;margin:0 auto;padding:12px 16px;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);font-family:sans-serif;font-size:11px;">
+            <div id="marksheet-to-print" style="background:white;width:100%;max-width:100%;padding:12px 16px;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);font-family:sans-serif;font-size:11px;box-sizing:border-box;">
 
                 <!-- ── COLLEGE HEADER ── -->
                 <div style="text-align:center;margin-bottom:6px;border-bottom:2px solid #1e3c72;padding-bottom:5px;">
@@ -235,13 +235,11 @@
                 </div>
 
                 <!-- ── ORANGE BANNER ── -->
-                <div style="background:linear-gradient(135deg,#ff9800,#ff5722);color:white;padding:6px 10px;text-align:center;border-radius:6px;margin-bottom:7px;">
+                <div style="background:linear-gradient(135deg,#ff9800,#ff5722);color:white;padding:3px 8px;text-align:center;border-radius:5px;margin-bottom:5px;line-height:1.4;">
                     <div id="rank-badge-container"></div>
-                    <div style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:0.5px;">
-                        CERTIFICATE IN THEOLOGY (C.T.H) 2025 EXAM RESULT &nbsp;|&nbsp; Academic Performance
-                    </div>
-                    <div id="marksheet-student-name" style="font-size:12px;font-weight:bold;margin-top:2px;"></div>
-                    <div id="marksheet-student-email-display" style="font-size:10px;opacity:0.85;"></div>
+                    <div style="font-size:8.5px;font-weight:900;text-transform:uppercase;letter-spacing:0.3px;">CERTIFICATE IN THEOLOGY (C.T.H) 2025 EXAM RESULT &nbsp;|&nbsp; Academic Performance</div>
+                    <div id="marksheet-student-name" style="font-size:10px;font-weight:bold;margin-top:1px;"></div>
+                    <div id="marksheet-student-email-display" style="font-size:8px;opacity:0.85;"></div>
                 </div>
 
                 <!-- ── SUMMARY CARDS (4-col HTML table — safe for html2pdf) ── -->
@@ -457,14 +455,15 @@
         if (rank > 0 && rank <= 5) {
             const badge = document.createElement('div');
             badge.style.cssText = `
-                background: #ffd700; color: #000; padding: 0 20px; border-radius: 30px;
-                font-weight: 900; display: flex; align-items: center; justify-content: center;
-                height: 35px; line-height: 1; margin: 0 auto 15px auto;
-                border: 3px solid #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-                font-size: 1rem; text-transform: uppercase;
+                background: #ffd700; color: #000; padding: 0 10px;
+                border-radius: 20px; font-weight: 900;
+                display: inline-flex; align-items: center;
+                height: 16px; line-height: 1; margin-bottom: 2px;
+                border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                font-size: 8px; text-transform: uppercase;
                 font-family: 'Segoe UI', Roboto, Arial, sans-serif;
             `;
-            badge.innerHTML = `🏆 TOP <span style="margin: 0 5px; display: inline-block; line-height: 1;">${rank}</span> RANK`;
+            badge.innerHTML = `🏆 TOP <span style="margin: 0 3px;">${rank}</span> RANK`;
             rankContainer.appendChild(badge);
         }
 
