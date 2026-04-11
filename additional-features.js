@@ -297,9 +297,11 @@
                 </table>
 
                 <!-- ── NEW TESTAMENT TABLE ── -->
-                <br><br><br><br><h3 style="color: #2196f3; border-left: 5px solid #2196f3; padding-left: 12px; margin-bottom: 10px; font-size: 1.1em; text-transform: uppercase; letter-spacing: 0.5px;">
-                    📘 New Testament Results
-                </h3>
+                 // Search for this line in additional-features.js and update the style:
+<h3 style="color: #1e3c72; border-bottom: 2px solid #1e3c72; padding-bottom: 10px; margin-top: 30px; page-break-before: always;">
+    📖 New Testament Results
+</h3>
+               
                 <table style="width: 100%; border-collapse: collapse; font-family: sans-serif; margin-bottom: 30px;">
                     <thead>
                         <tr style="background: #2196f3; color: white;">
