@@ -86,7 +86,7 @@
         const data = STUDENT_DATA.profiles[email];
         if (!data) return;
         window.hideAllContentSections();
-        
+
         let section = document.getElementById('profileSection');
         if (!section) {
             section = document.createElement('div');
@@ -98,7 +98,7 @@
         section.innerHTML = `
             <div style="max-width: 1000px; margin: 0 auto;">
                 <button onclick="window.backToDashboardFromProfile()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 20px; font-weight: bold;">⬅ BACK TO DASHBOARD</button>
-                
+
                 <div style="text-align: center; margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 20px;">
                     <h1 style="margin: 0; font-size: 2.2em; color: #1e3c72; font-family: 'Arial Black', Gadget, sans-serif; text-transform: uppercase; line-height: 1.2;">BIBLE COLLEGE OF INDIA PASTORS FOUNDATION</h1>
                     <p style="margin: 8px 0 0 0; font-size: 1em; color: #555; font-weight: 600;">(AFFILIATED TO JESUS LOVES INDIA CHURCH FOUNDATION)</p>
@@ -129,8 +129,8 @@
                         <div style="line-height: 2.5; font-size: 1.05em;">
                             <p>⛪ <strong>Church:</strong> <span style="float: right;">${data.church}</span></p>
                             <p>👨‍💼 <strong>Pastor:</strong> <span style="float: right;">${data.pastor}</span></p>
-                            <p>👤 <strong>Ref 1:</strong> <span style="float: right;">${data.ref1 || 'N/A'}</span></p>
-                            <p>👤 <strong>Ref 2:</strong> <span style="float: right;">${data.ref2 || 'N/A'}</span></p>
+                            <p>👤 <strong>Ref 1:</strong> <span style="float: right;">${data.reference1 || 'N/A'}</span></p>
+                            <p>👤 <strong>Ref 2:</strong> <span style="float: right;">${data.reference2 || 'N/A'}</span></p>
                         </div>
                     </div>
                 </div>
@@ -150,7 +150,7 @@
         const name = document.getElementById('marksheet-student-name').textContent;
         const btn = document.getElementById('downloadBtn');
         btn.innerText = "⌛ Processing...";
-        
+
         const opt = {
             margin: [10, 10, 10, 10],
             filename: `Marksheet_${name}.pdf`,
@@ -186,20 +186,12 @@
         Object.keys(STUDENT_DATA.profiles).filter(e => e !== 'jlibiblecollege@gmail.com').forEach(email => {
             const p = STUDENT_DATA.profiles[email];
             const card = document.createElement('div');
-            
             card.style.cssText = `
-                background: white; 
-                padding: 20px; 
-                margin-bottom: 15px; 
-                border-radius: 12px; 
-                box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
-                display: flex; 
-                flex-direction: column; 
-                align-items: center; 
-                text-align: center; 
-                border: 1px solid #eee;
+                background: white; padding: 20px; margin-bottom: 15px;
+                border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+                display: flex; flex-direction: column; align-items: center;
+                text-align: center; border: 1px solid #eee;
             `;
-            
             card.innerHTML = `
                 <div style="margin-bottom: 15px;">
                     <strong style="font-size: 1.1em; color: #1e3c72; display: block; margin-bottom: 2px;">${p.name}</strong>
@@ -214,49 +206,65 @@
         });
     };
 
+    // ─────────────────────────────────────────────────────────────────────
+    //  createMarksheetSection — HTML shell (unchanged structure)
+    // ─────────────────────────────────────────────────────────────────────
     function createMarksheetSection() {
         const section = document.createElement('div');
         section.id = 'marksheetSection';
         section.style.cssText = 'padding: 20px; background: #f8f9fa; display: none;';
-        
+
         section.innerHTML = `
             <div class="no-print-controls" style="display: flex; justify-content: space-between; margin-bottom: 20px;">
                 <button class="back-btn" onclick="window.backToDashboardFromMarksheet()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">⬅️ BACK</button>
                 <button id="downloadBtn" onclick="window.downloadMarksheet()" style="padding: 10px 20px; background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📥 DOWNLOAD PDF</button>
             </div>
-            
+
             <div id="marksheet-to-print" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); position: relative;">
+
+                <!-- College Header -->
                 <div style="text-align: center; margin-bottom: 25px; border-bottom: 2px solid #1e3c72; padding-bottom: 20px;">
                     <h1 style="margin: 0; font-size: 2em; color: #1e3c72; font-family: 'Arial Black', Gadget, sans-serif; text-transform: uppercase; line-height: 1.2;">BIBLE COLLEGE OF INDIA PASTORS FOUNDATION</h1>
                     <p style="margin: 8px 0 0 0; font-size: 0.95em; color: #555; font-weight: 600;">(AFFILIATED TO JESUS LOVES INDIA CHURCH FOUNDATION)</p>
                 </div>
 
+                <!-- Student Banner -->
                 <div class="marksheet-header" style="background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%); color: white; padding: 20px; text-align: center; border-radius: 12px; margin-bottom: 20px;">
                     <div id="rank-badge-container"></div>
-                    <div style="font-size: 1.25em; font-weight: bold; line-height: 1.2; margin-top: 10px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; vertical-align: middle; font-variant-numeric: lining-nums;">
-                        CERTIFICATE IN THEOLOGY (C.T.H) 2025 OLD TESTAMENT EXAM RESULT
+                    <div style="font-size: 1.25em; font-weight: bold; line-height: 1.2; margin-top: 10px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; font-variant-numeric: lining-nums;">
+                        CERTIFICATE IN THEOLOGY (C.T.H) 2025 EXAM RESULT
                     </div>
                     <h2 style="margin: 5px 0;">Academic Performance</h2>
                     <p id="marksheet-student-name" style="font-size: 1.2em; margin: 0; font-weight: bold;"></p>
                     <p id="marksheet-student-email-display" style="font-size: 0.9em; margin: 0; opacity: 0.8;"></p>
                 </div>
 
-                <div class="summary-cards" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
-                    <div class="summary-card" style="background: #fff; padding: 15px; border-radius: 8px; text-align: center; border-left: 5px solid #9c27b0; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                        <div style="font-size: 0.75em; font-weight: bold; color: #666;">ONLINE EXAMS</div>
+                <!-- Summary Cards: OT%, NT%, Combined%, Grade -->
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px;">
+                    <div style="background: #fff; padding: 15px; border-radius: 8px; text-align: center; border-left: 5px solid #9c27b0; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                        <div style="font-size: 0.75em; font-weight: bold; color: #666;">OT ONLINE EXAMS</div>
                         <div id="online-exams-taken" style="font-size: 1.8em; font-weight: bold; color: #9c27b0; font-variant-numeric: lining-nums;">0/7</div>
                     </div>
-                    <div class="summary-card" style="background: #fff; padding: 15px; border-radius: 8px; text-align: center; border-left: 5px solid #4caf50; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                        <div style="font-size: 0.75em; font-weight: bold; color: #666;">PERCENTAGE</div>
-                        <div id="final-percentage-score" style="font-size: 1.8em; font-weight: bold; color: #4caf50; line-height: 1.2; display: inline-block; font-variant-numeric: lining-nums; vertical-align: middle;">0%</div>
+                    <div style="background: #fff; padding: 15px; border-radius: 8px; text-align: center; border-left: 5px solid #1e3c72; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                        <div style="font-size: 0.75em; font-weight: bold; color: #666;">OLD TESTAMENT %</div>
+                        <div id="final-percentage-score" style="font-size: 1.8em; font-weight: bold; color: #1e3c72; font-variant-numeric: lining-nums;">0%</div>
                     </div>
-                    <div class="summary-card" style="background: #fff; padding: 15px; border-radius: 8px; text-align: center; border-left: 5px solid #f44336; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                        <div style="font-size: 0.75em; font-weight: bold; color: #666;">GRADE</div>
-                        <div id="final-grade-display" style="font-size: 1.8em; font-weight: bold; color: #f44336;">-</div>
+                    <div style="background: #fff; padding: 15px; border-radius: 8px; text-align: center; border-left: 5px solid #2196f3; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                        <div style="font-size: 0.75em; font-weight: bold; color: #666;">NEW TESTAMENT %</div>
+                        <div id="nt-percentage-score" style="font-size: 1.8em; font-weight: bold; color: #2196f3; font-variant-numeric: lining-nums;">Pending</div>
+                    </div>
+                    <div style="background: #fff; padding: 15px; border-radius: 8px; text-align: center; border-left: 5px solid #4caf50; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                        <div style="font-size: 0.75em; font-weight: bold; color: #666;">COMBINED % & GRADE</div>
+                        <div id="combined-percentage-score" style="font-size: 1.4em; font-weight: bold; color: #4caf50; font-variant-numeric: lining-nums;">Pending</div>
+                        <div id="final-grade-display" style="font-size: 1.2em; font-weight: bold; color: #f44336;">-</div>
                     </div>
                 </div>
 
-                <table style="width: 100%; border-collapse: collapse; font-family: sans-serif; margin-bottom: 40px;">
+                <!-- ── OLD TESTAMENT TABLE ── -->
+                <h3 style="color: #1e3c72; border-left: 5px solid #1e3c72; padding-left: 12px; margin-bottom: 10px; font-size: 1.1em; text-transform: uppercase; letter-spacing: 0.5px;">
+                    📖 Old Testament Results
+                </h3>
+                <table style="width: 100%; border-collapse: collapse; font-family: sans-serif; margin-bottom: 30px;">
                     <thead>
                         <tr style="background: #1e3c72; color: white;">
                             <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.9em;">Exam</th>
@@ -269,186 +277,290 @@
                     <tbody id="marks-table-body"></tbody>
                 </table>
 
-               <div style="display: flex; justify-content: space-around; align-items: flex-end;">
-        
-        <div style="text-align: center; width: 220px; display: flex; flex-direction: column; align-items: center;">
-            <img src="sign with stamp.png" style="width: 140px; height: auto; margin-bottom: 2px;">
-            <div style="width: 180px; height: 2px; background-color: #1e3c72; margin-bottom: 5px;"></div>
-            <div style="font-weight: bold; font-size: 0.85em; color: #1e3c72; line-height: 1.2;">
-                Prabha Sadanand Amolik<br>
-                <span style="font-size: 0.7em; color: #666; font-weight: normal;">DIRECTOR</span>
-            </div>
-        </div>
+                <!-- ── NEW TESTAMENT TABLE ── -->
+                <h3 style="color: #2196f3; border-left: 5px solid #2196f3; padding-left: 12px; margin-bottom: 10px; font-size: 1.1em; text-transform: uppercase; letter-spacing: 0.5px;">
+                    📘 New Testament Results
+                </h3>
+                <table style="width: 100%; border-collapse: collapse; font-family: sans-serif; margin-bottom: 30px;">
+                    <thead>
+                        <tr style="background: #2196f3; color: white;">
+                            <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.9em;">Exam</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.9em;">Marks</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.9em;">Out of</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.9em;">%</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.9em;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="nt-marks-table-body"></tbody>
+                </table>
 
-        <div style="text-align: center; width: 220px; display: flex; flex-direction: column; align-items: center;">
-            <img src="DIGITAL STAMP.jpeg" style="width: 140px; height: auto; margin-bottom: 2px;">
-            <div style="width: 180px; height: 2px; background-color: #1e3c72; margin-bottom: 5px;"></div>
-            <div style="font-weight: bold; font-size: 0.85em; color: #1e3c72; line-height: 1.2;">
-                Sadanand Shamrao Amolik<br>
-                <span style="font-size: 0.7em; color: #666; font-weight: normal;">DIRECTOR</span>
-            </div>
-        </div>
+                <!-- ── COMBINED FINAL ROW ── -->
+                <table style="width: 100%; border-collapse: collapse; font-family: sans-serif; margin-bottom: 40px;">
+                    <tbody id="combined-table-body"></tbody>
+                </table>
 
-    </div>
-</div>
+                <!-- Signatures -->
+                <div style="display: flex; justify-content: space-around; align-items: flex-end;">
+                    <div style="text-align: center; width: 220px; display: flex; flex-direction: column; align-items: center;">
+                        <img src="sign with stamp.png" style="width: 140px; height: auto; margin-bottom: 2px;">
+                        <div style="width: 180px; height: 2px; background-color: #1e3c72; margin-bottom: 5px;"></div>
+                        <div style="font-weight: bold; font-size: 0.85em; color: #1e3c72; line-height: 1.2;">
+                            Prabha Sadanand Amolik<br>
+                            <span style="font-size: 0.7em; color: #666; font-weight: normal;">DIRECTOR</span>
+                        </div>
+                    </div>
+                    <div style="text-align: center; width: 220px; display: flex; flex-direction: column; align-items: center;">
+                        <img src="DIGITAL STAMP.jpeg" style="width: 140px; height: auto; margin-bottom: 2px;">
+                        <div style="width: 180px; height: 2px; background-color: #1e3c72; margin-bottom: 5px;"></div>
+                        <div style="font-weight: bold; font-size: 0.85em; color: #1e3c72; line-height: 1.2;">
+                            Sadanand Shamrao Amolik<br>
+                            <span style="font-size: 0.7em; color: #666; font-weight: normal;">DIRECTOR</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- end #marksheet-to-print -->
         `;
         return section;
     }
 
+    // ─────────────────────────────────────────────────────────────────────
+    //  populateMarksheet — fills OT table, NT table, and combined row
+    // ─────────────────────────────────────────────────────────────────────
     function populateMarksheet(studentMarksData, studentProfileData, email) {
-        const onlineMarks = studentMarksData.marks;
-        const examMonths = STUDENT_DATA.examMonths;
-        const offlineMark = studentMarksData.offlineMark;
-        
-        let totalOnlineMarks = 0;
-        let onlineExamsTaken = 0;
-        const tableBody = document.getElementById('marks-table-body');
-        tableBody.innerHTML = '';
 
-        onlineMarks.forEach((mark, index) => {
+        // ── OT DATA ──────────────────────────────────────────
+        const otOnlineMarks = studentMarksData.marks;
+        const otOfflineMark = studentMarksData.offlineMark;
+        const examMonths    = STUDENT_DATA.examMonths;        // 7 labels
+
+        let otTotalOnline = 0, otExamsTaken = 0;
+        const otTableBody = document.getElementById('marks-table-body');
+        otTableBody.innerHTML = '';
+
+        otOnlineMarks.forEach((mark, index) => {
             if (mark !== null && typeof mark === 'number') {
-                totalOnlineMarks += mark;
-                onlineExamsTaken++;
+                otTotalOnline += mark;
+                otExamsTaken++;
             }
-            const statusText = getStatus(mark);
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.85em; font-weight: 600;">${examMonths[index]}</td>
-                <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.85em; text-align: center; font-variant-numeric: lining-nums;">${mark !== null ? mark : 'Absent'}</td>
-                <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.85em; text-align: center;">100</td>
-                <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.85em; text-align: center; font-variant-numeric: lining-nums;">${mark !== null ? mark + '%' : '-'}</td>
-                <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.85em; text-align: center; font-weight: 600;">${statusText}</td>
+                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:600;">${examMonths[index]}</td>
+                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${mark !== null ? mark : 'Absent'}</td>
+                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">100</td>
+                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${mark !== null ? mark + '%' : '-'}</td>
+                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${getStatus(mark)}</td>
             `;
-            tableBody.appendChild(row);
+            otTableBody.appendChild(row);
         });
 
-        // Calculations
-        const monthlyAvg = (totalOnlineMarks / 700) * 100;
-        const weight20 = monthlyAvg * 0.20;
-        const actualOffline = (offlineMark !== null && typeof offlineMark === 'number') ? offlineMark : 0;
-        const weight80 = actualOffline * 0.80;
-        const finalPer = parseFloat((weight20 + weight80).toFixed(2));
+        // OT calculations
+        const otMonthlyAvg   = (otTotalOnline / 700) * 100;
+        const otWeight20     = otMonthlyAvg * 0.20;
+        const otActualOffline = (otOfflineMark !== null && typeof otOfflineMark === 'number') ? otOfflineMark : 0;
+        const otWeight80     = otActualOffline * 0.80;
+        const otFinalPer     = parseFloat((otWeight20 + otWeight80).toFixed(2));
 
-        // Rows for Monthly Total and Offline Exam
-        const summaryData = [
-            { label: 'Total Monthly (700)', val: totalOnlineMarks.toFixed(2), outOf: 700, per: monthlyAvg.toFixed(2) + '%' },
-            { label: 'Offline Exam (%)', val: actualOffline.toFixed(2), outOf: 100, per: actualOffline + '%' }
-        ];
+        // OT summary rows
+        appendSummaryRows(otTableBody, otTotalOnline, 700, otMonthlyAvg, otActualOffline, otWeight20, otWeight80, otFinalPer, '#f8f9fa', '#eef2f7', '#fff3cd', 'OT Final Result');
 
-        summaryData.forEach((item) => {
-            const r = document.createElement('tr');
-            r.style.background = '#f8f9fa';
-            // Calculate status based on actual performance percentage
-            const performancePercentage = item.label.includes('700') ? (item.val / 7) : item.val;
-            r.innerHTML = `
-                <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.85em; font-weight: bold;">${item.label}</td>
-                <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.85em; text-align: center; font-variant-numeric: lining-nums;">${item.val}</td>
-                <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.85em; text-align: center;">${item.outOf}</td>
-                <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.85em; text-align: center; font-variant-numeric: lining-nums;">${item.per}</td>
-                <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.85em; text-align: center; font-weight: 600;">${getStatus(performancePercentage)}</td>
-            `;
-            tableBody.appendChild(r);
-        });
+        // ── NT DATA ──────────────────────────────────────────
+        const ntData         = STUDENT_DATA.ntMarks ? STUDENT_DATA.ntMarks[email] : null;
+        const ntOnlineMarks  = ntData ? ntData.marks : [null, null, null, null, null];
+        const ntOfflineMark  = ntData ? ntData.offlineMark : null;
+        const ntExamMonths   = STUDENT_DATA.ntExamMonths;    // 5 labels
 
-        // --- FIXED STATUS FOR WEIGHTAGE ROWS ---
-        const rows2080 = [
-            { label: '20% of Monthly average', val: weight20.toFixed(2), outOf: 20, statusVal: monthlyAvg },
-            { label: '80% of Offline exam', val: weight80.toFixed(2), outOf: 80, statusVal: actualOffline }
-        ];
+        let ntTotalOnline = 0, ntExamsTaken = 0;
+        const ntTableBody = document.getElementById('nt-marks-table-body');
+        ntTableBody.innerHTML = '';
 
-        rows2080.forEach(item => {
+        ntOnlineMarks.forEach((mark, index) => {
+            if (mark !== null && typeof mark === 'number') {
+                ntTotalOnline += mark;
+                ntExamsTaken++;
+            }
             const row = document.createElement('tr');
-            row.style.background = '#eef2f7';
             row.innerHTML = `
-                <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.85em; font-weight: bold; color: #1e3c72;">${item.label}</td>
-                <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.85em; text-align: center; font-variant-numeric: lining-nums;">${item.val}</td>
-                <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.85em; text-align: center;">${item.outOf}</td>
-                <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.85em; text-align: center;">-</td>
-                <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.85em; text-align: center; font-weight: 600;">${getStatus(item.statusVal)}</td>
+                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:600;">${ntExamMonths[index]}</td>
+                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${mark !== null ? mark : 'Pending'}</td>
+                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">100</td>
+                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${mark !== null ? mark + '%' : '-'}</td>
+                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${getStatus(mark)}</td>
             `;
-            tableBody.appendChild(row);
+            ntTableBody.appendChild(row);
         });
 
-        // Final Result Row
-        const finalRow = document.createElement('tr');
-        finalRow.style.background = '#fff3cd';
-        finalRow.innerHTML = `
-            <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.9em; font-weight: 900; color: #856404;">Final result</td>
-            <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.9em; text-align: center; font-weight: 900; font-variant-numeric: lining-nums;">${finalPer.toFixed(2)}</td>
-            <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.9em; text-align: center; font-weight: 900;">100</td>
-            <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.9em; text-align: center; font-weight: 900; font-variant-numeric: lining-nums;">${finalPer}%</td>
-            <td style="padding: 6px; border: 1px solid #ddd; font-size: 0.9em; text-align: center; font-weight: 900;">${getStatus(finalPer)}</td>
+        // NT calculations
+        const ntMonthlyAvg    = (ntTotalOnline / 500) * 100;  // 5 exams × 100 = 500
+        const ntWeight20      = ntMonthlyAvg * 0.20;
+        const ntActualOffline = (ntOfflineMark !== null && typeof ntOfflineMark === 'number') ? ntOfflineMark : 0;
+        const ntWeight80      = ntActualOffline * 0.80;
+        const ntFinalPer      = parseFloat((ntWeight20 + ntWeight80).toFixed(2));
+
+        // NT summary rows — show "Pending" label if no NT data at all
+        const ntHasAnyData = ntExamsTaken > 0 || (ntOfflineMark !== null);
+        appendSummaryRows(ntTableBody, ntTotalOnline, 500, ntMonthlyAvg, ntActualOffline, ntWeight20, ntWeight80, ntFinalPer, '#f0f7ff', '#e8f4fd', '#e3f2fd', 'NT Final Result', !ntHasAnyData);
+
+        // ── COMBINED FINAL ROW ────────────────────────────────
+        const combinedTableBody = document.getElementById('combined-table-body');
+        combinedTableBody.innerHTML = '';
+
+        const ntAvailable = ntHasAnyData && ntOfflineMark !== null;
+        const combinedFinal = ntAvailable
+            ? parseFloat(((otFinalPer + ntFinalPer) / 2).toFixed(2))
+            : null;
+
+        const combinedRow = document.createElement('tr');
+        combinedRow.style.background = '#1e3c72';
+        combinedRow.innerHTML = `
+            <td style="padding:10px;border:2px solid #1e3c72;font-size:1em;font-weight:900;color:#fff;">
+                🏆 Combined Final Result<br>
+                <span style="font-size:0.75em;font-weight:400;opacity:0.85;">(OT Final % + NT Final %) ÷ 2</span>
+            </td>
+            <td style="padding:10px;border:2px solid #1e3c72;font-size:1em;text-align:center;font-weight:900;color:#fff;font-variant-numeric:lining-nums;">
+                ${combinedFinal !== null ? combinedFinal + '%' : 'NT Pending'}
+            </td>
+            <td style="padding:10px;border:2px solid #1e3c72;font-size:1em;text-align:center;color:#fff;">100</td>
+            <td style="padding:10px;border:2px solid #1e3c72;font-size:1em;text-align:center;font-weight:900;color:#ffd700;font-variant-numeric:lining-nums;">
+                ${combinedFinal !== null ? combinedFinal + '%' : '-'}
+            </td>
+            <td style="padding:10px;border:2px solid #1e3c72;font-size:1em;text-align:center;font-weight:900;color:#ffd700;">
+                ${combinedFinal !== null ? calculateGrade(combinedFinal) : 'NT Pending'}
+            </td>
         `;
-        tableBody.appendChild(finalRow);
+        combinedTableBody.appendChild(combinedRow);
 
-        // Ranking logic
+        // ── RANKING (based on OT only until NT is available) ──
         const allScores = Object.keys(STUDENT_DATA.marks).map(e => {
-            const m = STUDENT_DATA.marks[e];
+            const m   = STUDENT_DATA.marks[e];
             const avg = (m.marks.reduce((a, b) => (typeof b === 'number' ? a + b : a), 0) / 700) * 100;
             const off = (typeof m.offlineMark === 'number') ? m.offlineMark : 0;
             return parseFloat(((avg * 0.20) + (off * 0.80)).toFixed(2));
         }).sort((a, b) => b - a);
 
-        const rank = allScores.indexOf(finalPer) + 1;
+        const rank = allScores.indexOf(otFinalPer) + 1;
         const rankContainer = document.getElementById('rank-badge-container');
         rankContainer.innerHTML = '';
-        
-       if (rank > 0 && rank <= 5) {
-    const badge = document.createElement('div');
-    // THE FIX: Use 'display: flex', 'align-items: center', and 'line-height: 1'
-    badge.style.cssText = `
-        background: #ffd700; 
-        color: #000; 
-        padding: 0 20px; 
-        border-radius: 30px; 
-        font-weight: 900; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        height: 35px; 
-        line-height: 1; 
-        margin: 0 auto 15px auto; 
-        border: 3px solid #fff; 
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
-        font-size: 1rem; 
-        text-transform: uppercase;
-        font-family: 'Segoe UI', Roboto, Arial, sans-serif; /* Added for alignment */
-    `;
+        if (rank > 0 && rank <= 5) {
+            const badge = document.createElement('div');
+            badge.style.cssText = `
+                background: #ffd700; color: #000; padding: 0 20px; border-radius: 30px;
+                font-weight: 900; display: flex; align-items: center; justify-content: center;
+                height: 35px; line-height: 1; margin: 0 auto 15px auto;
+                border: 3px solid #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                font-size: 1rem; text-transform: uppercase;
+                font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            `;
+            badge.innerHTML = `🏆 TOP <span style="margin: 0 5px; display: inline-block; line-height: 1;">${rank}</span> RANK`;
+            rankContainer.appendChild(badge);
+        }
 
-    // Wrap the rank in a span to control its vertical behavior
-    badge.innerHTML = `🏆 TOP <span style="margin: 0 5px; display: inline-block; line-height: 1;">${rank}</span> RANK`;
-    rankContainer.appendChild(badge);
-}
-
-        // Update Final UI with alignment fixes
-        console.log("studentProfileData:", studentProfileData); // Add this line
-        document.getElementById('marksheet-student-name').textContent = studentProfileData.name;
+        // ── UPDATE SUMMARY CARDS ──────────────────────────────
+        document.getElementById('marksheet-student-name').textContent = studentProfileData?.name || email;
         document.getElementById('marksheet-student-email-display').textContent = email;
-        document.getElementById('online-exams-taken').textContent = `${onlineExamsTaken}/7`;
-        
-        const finalPerElement = document.getElementById('final-percentage-score');
-        finalPerElement.textContent = finalPer + '%';
-        finalPerElement.style.fontVariantNumeric = 'lining-nums';
-        
-        document.getElementById('final-grade-display').textContent = calculateGrade(finalPer);
+        document.getElementById('online-exams-taken').textContent = `${otExamsTaken}/7`;
+
+        const otPerEl = document.getElementById('final-percentage-score');
+        otPerEl.textContent = otFinalPer + '%';
+        otPerEl.style.fontVariantNumeric = 'lining-nums';
+
+        const ntPerEl = document.getElementById('nt-percentage-score');
+        ntPerEl.textContent = ntHasAnyData ? ntFinalPer + '%' : 'Pending';
+
+        const combinedEl = document.getElementById('combined-percentage-score');
+        combinedEl.textContent = combinedFinal !== null ? combinedFinal + '%' : 'Pending';
+
+        document.getElementById('final-grade-display').textContent =
+            combinedFinal !== null ? calculateGrade(combinedFinal) : '-';
     }
 
+    // ─────────────────────────────────────────────────────────────────────
+    //  appendSummaryRows — reusable for both OT and NT tables
+    //  isPending: if true, shows "Pending" in the final row instead of 0%
+    // ─────────────────────────────────────────────────────────────────────
+    function appendSummaryRows(tableBody, totalOnline, totalPossible, monthlyAvg, actualOffline, weight20, weight80, finalPer, bg1, bg2, bg3, finalLabel, isPending) {
+
+        // Row 1: Total online
+        const r1 = document.createElement('tr');
+        r1.style.background = bg1;
+        r1.innerHTML = `
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:bold;">Total Online (${totalPossible})</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${totalOnline}</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">${totalPossible}</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${monthlyAvg.toFixed(2)}%</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${getStatus(monthlyAvg)}</td>
+        `;
+        tableBody.appendChild(r1);
+
+        // Row 2: Offline exam
+        const r2 = document.createElement('tr');
+        r2.style.background = bg1;
+        r2.innerHTML = `
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:bold;">Offline Exam (%)</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${isPending ? 'Pending' : actualOffline}</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">100</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${isPending ? '-' : actualOffline + '%'}</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${isPending ? 'Pending' : getStatus(actualOffline)}</td>
+        `;
+        tableBody.appendChild(r2);
+
+        // Row 3: 20% weightage
+        const r3 = document.createElement('tr');
+        r3.style.background = bg2;
+        r3.innerHTML = `
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:bold;color:#1e3c72;">20% of Online Average</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${weight20.toFixed(2)}</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">20</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">-</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${getStatus(monthlyAvg)}</td>
+        `;
+        tableBody.appendChild(r3);
+
+        // Row 4: 80% weightage
+        const r4 = document.createElement('tr');
+        r4.style.background = bg2;
+        r4.innerHTML = `
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:bold;color:#1e3c72;">80% of Offline Exam</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${isPending ? 'Pending' : weight80.toFixed(2)}</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">80</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">-</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${isPending ? 'Pending' : getStatus(actualOffline)}</td>
+        `;
+        tableBody.appendChild(r4);
+
+        // Row 5: Final result for this testament
+        const r5 = document.createElement('tr');
+        r5.style.background = bg3;
+        r5.innerHTML = `
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.9em;font-weight:900;color:#856404;">${finalLabel}</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.9em;text-align:center;font-weight:900;font-variant-numeric:lining-nums;">${isPending ? 'Pending' : finalPer.toFixed(2)}</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.9em;text-align:center;font-weight:900;">100</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.9em;text-align:center;font-weight:900;font-variant-numeric:lining-nums;">${isPending ? 'Pending' : finalPer + '%'}</td>
+            <td style="padding:6px;border:1px solid #ddd;font-size:0.9em;text-align:center;font-weight:900;">${isPending ? 'Pending' : calculateGrade(finalPer)}</td>
+        `;
+        tableBody.appendChild(r5);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────
+    //  Helpers
+    // ─────────────────────────────────────────────────────────────────────
     function calculateGrade(percentage) {
         if (percentage === null || isNaN(percentage)) return 'N/A';
         if (percentage >= 90) return 'A+';
-        else if (percentage >= 80) return 'A';
-        else if (percentage >= 70) return 'B+';
-        else if (percentage >= 60) return 'B';
-        else if (percentage >= 50) return 'C';
-        else return 'Needs Improvement';
+        if (percentage >= 80) return 'A';
+        if (percentage >= 70) return 'B+';
+        if (percentage >= 60) return 'B';
+        if (percentage >= 50) return 'C';
+        return 'Needs Improvement';
     }
 
     function getStatus(mark) {
-        if (mark === null || isNaN(mark)) return 'N/A';
+        if (mark === null || mark === undefined || isNaN(mark)) return 'N/A';
         const num = parseFloat(mark);
         if (num >= 90) return 'Excellent';
         if (num >= 80) return 'Good';
         if (num >= 70) return 'Average';
+        if (num >= 50) return 'Below Average';
         return 'Needs Improvement';
     }
 
