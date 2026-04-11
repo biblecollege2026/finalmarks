@@ -2,30 +2,84 @@
 // Bible College of India - Student Data Storage
 
 const STUDENT_DATA = {
-    // Academic Performance Data
+
+    // ─────────────────────────────────────────────
+    //  OLD TESTAMENT — 7 online exams + 1 offline
+    // ─────────────────────────────────────────────
     marks: {
-        'manoramaramane@gmail.com': { name: 'Manorama Ramane', marks: [90, 100, 97, 100, 100, 100, 93], offlineMark: 91 },
-        'rvpardhe07@gmail.com': { name: 'Kavita Pardhe', marks: [92, 100, 100, 100, 100, 100, 86], offlineMark: 51 },
-        'vypardh78@gmail.com': { name: 'Vishal Pardhe', marks: [89, 100, 100, 100, 100, 100, 74], offlineMark: 90 },
-        'aadamgujare@gmail.com': { name: 'Aadam Gujare', marks: [93, 100, 100, 100, 100, 80, 88], offlineMark: 79 },
-        'ranjeeta.kamble333@gmail.com': { name: 'Ranjana Kamble', marks: [52, 100, 100, 100, 100, 100, 94], offlineMark: 82 },
-        'p82158860@gmail.com': { name: 'Pritee Gaikwad', marks: [63, 75, 90, 100, 100, 100, 76], offlineMark: 72 },
-        'buddhiwantmeene@gmail.com': { name: 'Meena Buddhiwant', marks: [74, 70, 100, 100, 100, 100, 74], offlineMark: 89 },
-        'khilarelajo@gmail.com': { name: 'Helen Khillare', marks: [74, 85, 100, 100, 100, 100, 69], offlineMark: 86 },
-        'fkhilare@gmail.com': { name: 'Francis Khilare', marks: [77, 85, 70, 60, 80, 80, 90], offlineMark: 66 },
-        'bhaleraojitesh727@gmail.com': { name: 'Jitesh Bhalerao', marks: [83, 50, 60, null, 90, 100, 72], offlineMark: 66 },
-        'dpadvi604@gmail.com': { name: 'Dinesh Padvi', marks: [70, 100, 100, 50, 60, 60, null], offlineMark: 49 },
-        'bordeamol26@gmail.com': { name: 'Amol Borde', marks: [90, 95, null, null, null, null, null], offlineMark: 71.5 },
-        'borde.siyona@gmail.com': { name: 'Siyona Borde', marks: [93, 100, null, null, null, null, null], offlineMark: 83.5 },
-        'manisha.fernandis15@gmail.com': { name: 'Manisha Fernandis', marks: [null, null, 70, 74, 50, null, 37], offlineMark: 60 },
-        'meghadhusia09june@gmail.com': { name: 'Megha Mhaske', marks: [null, 48, 100, 40, null, null, null], offlineMark: null }, // 'N/A' in report
-        'ashubaladon@gmail.com': { name: 'Ashish Dongerdive', marks: [75, 70, null, null, null, null, null], offlineMark: 84 },
-        'vishforluv1982@gmail.com': { name: 'Vishwas Bhosale', marks: [62, 50, null, 100, 40, null, null], offlineMark: 43 },
-        'brani4211@gmail.com': { name: 'Rani Bhosale', marks: [null, null, null, null, null, null, null], offlineMark: 46 },
-        'michaelsalvi9324@gmail.com': { name: 'Michael Salvi', marks: [93, 70, 100, 74, 100, 100, 83], offlineMark: 47 } // Added Michael Salvi's marks entry
+        'manoramaramane@gmail.com':      { name: 'Manorama Ramane',      marks: [90, 100, 97, 100, 100, 100, 93], offlineMark: 91 },
+        'rvpardhe07@gmail.com':          { name: 'Kavita Pardhe',         marks: [92, 100, 100, 100, 100, 100, 86], offlineMark: 51 },
+        'vypardh78@gmail.com':           { name: 'Vishal Pardhe',         marks: [89, 100, 100, 100, 100, 100, 74], offlineMark: 90 },
+        'aadamgujare@gmail.com':         { name: 'Aadam Gujare',          marks: [93, 100, 100, 100, 100, 80, 88],  offlineMark: 79 },
+        'ranjeeta.kamble333@gmail.com':  { name: 'Ranjana Kamble',        marks: [52, 100, 100, 100, 100, 100, 94], offlineMark: 82 },
+        'p82158860@gmail.com':           { name: 'Pritee Gaikwad',        marks: [63, 75, 90, 100, 100, 100, 76],  offlineMark: 72 },
+        'buddhiwantmeene@gmail.com':     { name: 'Meena Buddhiwant',      marks: [74, 70, 100, 100, 100, 100, 74], offlineMark: 98 },
+        'khilarelajo@gmail.com':         { name: 'Helen Khillare',        marks: [74, 85, 100, 100, 100, 100, 69], offlineMark: 86 },
+        'fkhilare@gmail.com':            { name: 'Francis Khilare',       marks: [77, 85, 70, 60, 80, 80, 90],     offlineMark: 66 },
+        'bhaleraojitesh727@gmail.com':   { name: 'Jitesh Bhalerao',       marks: [83, 50, 60, null, 90, 100, 72],  offlineMark: 66 },
+        'dpadvi604@gmail.com':           { name: 'Dinesh Padvi',          marks: [70, 100, 100, 50, 60, 60, null], offlineMark: 49 },
+        'bordeamol26@gmail.com':         { name: 'Amol Borde',            marks: [90, 95, null, null, null, null, null], offlineMark: 71.5 },
+        'borde.siyona@gmail.com':        { name: 'Siyona Borde',          marks: [93, 100, null, null, null, null, null], offlineMark: 83.5 },
+        'manisha.fernandis15@gmail.com': { name: 'Manisha Fernandis',     marks: [null, null, 70, 74, 50, null, 37], offlineMark: 60 },
+        'meghadhusia09june@gmail.com':   { name: 'Megha Mhaske',          marks: [null, 48, 100, 40, null, null, null], offlineMark: null },
+        'ashubaladon@gmail.com':         { name: 'Ashish Dongerdive',     marks: [75, 70, null, null, null, null, null], offlineMark: 84 },
+        'vishforluv1982@gmail.com':      { name: 'Vishwas Bhosale',       marks: [62, 50, null, 100, 40, null, null], offlineMark: 43 },
+        'brani4211@gmail.com':           { name: 'Rani Bhosale',          marks: [null, null, null, null, null, null, null], offlineMark: 46 },
+        'michaelsalvi9324@gmail.com':    { name: 'Michael Salvi',         marks: [93, 70, 100, 74, 100, 100, 83], offlineMark: 47 }
     },
 
-    // Student Profile Information
+    // OT online exam labels (7 exams — offline is handled separately)
+    examMonths: [
+        'June Exam',
+        'July Exam',
+        'August Exam',
+        'September Exam',
+        'October Exam',
+        'November Exam - 1',
+        'November Exam - 2'
+    ],
+
+    // ─────────────────────────────────────────────
+    //  NEW TESTAMENT — 5 online exams + 1 offline
+    //  Offline = May 2026 Final Exam (NT)
+    //  Formula: (online avg × 20%) + (offline × 80%)
+    //  To add marks: fill in the marks array [Feb, Mar1, Mar2, Apr1, Apr2]
+    //  and set offlineMark once May 2026 exam is done.
+    // ─────────────────────────────────────────────
+    ntMarks: {
+        'manoramaramane@gmail.com':      { marks: [null, null, null, null, null], offlineMark: null },
+        'rvpardhe07@gmail.com':          { marks: [null, null, null, null, null], offlineMark: null },
+        'vypardh78@gmail.com':           { marks: [null, null, null, null, null], offlineMark: null },
+        'aadamgujare@gmail.com':         { marks: [null, null, null, null, null], offlineMark: null },
+        'ranjeeta.kamble333@gmail.com':  { marks: [null, null, null, null, null], offlineMark: null },
+        'p82158860@gmail.com':           { marks: [null, null, null, null, null], offlineMark: null },
+        'buddhiwantmeene@gmail.com':     { marks: [null, null, null, null, null], offlineMark: null },
+        'khilarelajo@gmail.com':         { marks: [null, null, null, null, null], offlineMark: null },
+        'fkhilare@gmail.com':            { marks: [null, null, null, null, null], offlineMark: null },
+        'bhaleraojitesh727@gmail.com':   { marks: [null, null, null, null, null], offlineMark: null },
+        'dpadvi604@gmail.com':           { marks: [null, null, null, null, null], offlineMark: null },
+        'bordeamol26@gmail.com':         { marks: [null, null, null, null, null], offlineMark: null },
+        'borde.siyona@gmail.com':        { marks: [null, null, null, null, null], offlineMark: null },
+        'manisha.fernandis15@gmail.com': { marks: [null, null, null, null, null], offlineMark: null },
+        'meghadhusia09june@gmail.com':   { marks: [null, null, null, null, null], offlineMark: null },
+        'ashubaladon@gmail.com':         { marks: [null, null, null, null, null], offlineMark: null },
+        'vishforluv1982@gmail.com':      { marks: [null, null, null, null, null], offlineMark: null },
+        'brani4211@gmail.com':           { marks: [null, null, null, null, null], offlineMark: null },
+        'michaelsalvi9324@gmail.com':    { marks: [null, null, null, null, null], offlineMark: null }
+    },
+
+    // NT online exam labels (5 exams — May 2026 offline handled separately)
+    ntExamMonths: [
+        'February Exam',
+        'March Exam 1',
+        'March Exam 2',
+        'April Exam 1',
+        'April Exam 2'
+    ],
+
+    // ─────────────────────────────────────────────
+    //  STUDENT PROFILES
+    // ─────────────────────────────────────────────
     profiles: {
         'p82158860@gmail.com': {
             name: 'Pritee B. Gaikwad',
@@ -59,10 +113,10 @@ const STUDENT_DATA = {
             reference2: '',
             futurePlan: 'Glorifying God\'s Name, Preaching Kingdom of God'
         },
-        'manisha.fernandis15@gmail.com':{
+        'manisha.fernandis15@gmail.com': {
             name: 'Manisha Fernandis',
             address: 'Mumbai, Ambernath',
-            gender:'Female',
+            gender: 'Female'
         },
         'vypardh78@gmail.com': {
             name: 'Vishal Yeshwant Pardhe',
@@ -290,7 +344,7 @@ const STUDENT_DATA = {
         },
         'michaelsalvi9324@gmail.com': {
             name: 'Michael Salvi',
-            address: 'Jeevan Sinhha Co-op Housing Society, Ramne Sitaram Chawl, Parvati Paytha East, Pune-9, Behind Bharat Petrol Pump, 4th Floor',
+            address: 'Jeevan Sinhha Co-op Housing Society, Ramne Sitaram Chawl, Parvati Paytha East, Pune-9',
             mobile: '9730524015',
             dob: '1982',
             age: 60,
@@ -302,13 +356,13 @@ const STUDENT_DATA = {
             pastor: 'Pastor KCD Jacob',
             reference1: 'Pastor KCD Jacob',
             reference2: '',
-            futurePlan: 'To serve the Lord to work, I want to tell the Gospel to the people to the other'
+            futurePlan: 'To serve the Lord to work, I want to tell the Gospel to the people'
         },
         'aadamgujare@gmail.com': {
             name: 'Aadam Gujare',
             address: 'Near Marathi School, Kolhapur Haroli',
             mobile: '9022335090',
-            gender: 'male',
+            gender: 'Male',
             marital: 'Married'
         },
         'jlibiblecollege@gmail.com': {
@@ -327,8 +381,5 @@ const STUDENT_DATA = {
             reference2: 'N/A',
             futurePlan: 'Administering Bible College'
         }
-    },
-
-    // Exam months mapping (updated to include offline)
-    examMonths: ['June Exam', 'July Exam', 'August Exam', 'September Exam', 'October Exam', 'November Exam - 1 ', 'November Exam - 2', 'Offline Old testment Exam']
+    }
 };
