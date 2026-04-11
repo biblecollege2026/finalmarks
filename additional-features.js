@@ -152,10 +152,10 @@
         btn.innerText = "⌛ Processing...";
 
         const opt = {
-            margin: [10, 10, 10, 10],
+            margin: [5, 5, 5, 5],
             filename: `Marksheet_${name}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
+            html2canvas: { scale: 1.5, useCORS: true },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
@@ -207,114 +207,120 @@
     };
 
     // ─────────────────────────────────────────────────────────────────────
-    //  createMarksheetSection — HTML shell (unchanged structure)
+    //  createMarksheetSection — compact single-A4-page layout
     // ─────────────────────────────────────────────────────────────────────
     function createMarksheetSection() {
         const section = document.createElement('div');
         section.id = 'marksheetSection';
-        section.style.cssText = 'padding: 20px; background: #f8f9fa; display: none;';
+        section.style.cssText = 'padding: 10px; background: #f8f9fa; display: none;';
 
         section.innerHTML = `
-            <div class="no-print-controls" style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-                <button class="back-btn" onclick="window.backToDashboardFromMarksheet()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">⬅️ BACK</button>
-                <button id="downloadBtn" onclick="window.downloadMarksheet()" style="padding: 10px 20px; background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📥 DOWNLOAD PDF</button>
+            <div class="no-print-controls" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <button class="back-btn" onclick="window.backToDashboardFromMarksheet()" style="padding: 8px 16px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">⬅️ BACK</button>
+                <button id="downloadBtn" onclick="window.downloadMarksheet()" style="padding: 8px 16px; background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📥 DOWNLOAD PDF</button>
             </div>
 
-            <div id="marksheet-to-print" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); position: relative;">
+            <div id="marksheet-to-print" style="background: white; padding: 14px 18px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); font-size: 0.82em;">
 
-                <!-- College Header -->
-                <div style="text-align: center; margin-bottom: 25px; border-bottom: 2px solid #1e3c72; padding-bottom: 20px;">
-                    <h1 style="margin: 0; font-size: 2em; color: #1e3c72; font-family: 'Arial Black', Gadget, sans-serif; text-transform: uppercase; line-height: 1.2;">BIBLE COLLEGE OF INDIA PASTORS FOUNDATION</h1>
-                    <p style="margin: 8px 0 0 0; font-size: 0.95em; color: #555; font-weight: 600;">(AFFILIATED TO JESUS LOVES INDIA CHURCH FOUNDATION)</p>
+                <!-- College Header — compact -->
+                <div style="text-align: center; margin-bottom: 8px; border-bottom: 2px solid #1e3c72; padding-bottom: 6px;">
+                    <h1 style="margin: 0; font-size: 1.5em; color: #1e3c72; font-family: 'Arial Black', Gadget, sans-serif; text-transform: uppercase; line-height: 1.1;">BIBLE COLLEGE OF INDIA PASTORS FOUNDATION</h1>
+                    <p style="margin: 3px 0 0 0; font-size: 0.9em; color: #555; font-weight: 600;">(AFFILIATED TO JESUS LOVES INDIA CHURCH FOUNDATION)</p>
                 </div>
 
-                <!-- Student Banner -->
-                <div class="marksheet-header" style="background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%); color: white; padding: 20px; text-align: center; border-radius: 12px; margin-bottom: 20px;">
+                <!-- Student Banner — compact -->
+                <div style="background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%); color: white; padding: 8px 12px; text-align: center; border-radius: 8px; margin-bottom: 8px;">
                     <div id="rank-badge-container"></div>
-                    <div style="font-size: 1.25em; font-weight: bold; line-height: 1.2; margin-top: 10px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; font-variant-numeric: lining-nums;">
+                    <div style="font-size: 1em; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">
                         CERTIFICATE IN THEOLOGY (C.T.H) 2025 EXAM RESULT
                     </div>
-                    <h2 style="margin: 5px 0;">Academic Performance</h2>
-                    <p id="marksheet-student-name" style="font-size: 1.2em; margin: 0; font-weight: bold;"></p>
-                    <p id="marksheet-student-email-display" style="font-size: 0.9em; margin: 0; opacity: 0.8;"></p>
+                    <div style="font-size: 0.9em; font-weight: bold; margin-top: 3px;">Academic Performance</div>
+                    <div id="marksheet-student-name" style="font-size: 1.05em; font-weight: bold; margin-top: 2px;"></div>
+                    <div id="marksheet-student-email-display" style="font-size: 0.8em; opacity: 0.85;"></div>
                 </div>
 
-                <!-- Summary Cards: OT%, NT%, Combined%, Grade -->
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px;">
-                    <div style="background: #fff; padding: 15px; border-radius: 8px; text-align: center; border-left: 5px solid #9c27b0; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                        <div style="font-size: 0.75em; font-weight: bold; color: #666;">OT ONLINE EXAMS</div>
-                        <div id="online-exams-taken" style="font-size: 1.8em; font-weight: bold; color: #9c27b0; font-variant-numeric: lining-nums;">0/7</div>
+                <!-- Summary Cards — 4 columns compact -->
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 8px;">
+                    <div style="background: #f8f0ff; padding: 6px 8px; border-radius: 6px; text-align: center; border-left: 4px solid #9c27b0;">
+                        <div style="font-size: 0.7em; font-weight: bold; color: #666;">OT ONLINE EXAMS</div>
+                        <div id="online-exams-taken" style="font-size: 1.3em; font-weight: bold; color: #9c27b0; font-variant-numeric: lining-nums;">0/7</div>
                     </div>
-                    <div style="background: #fff; padding: 15px; border-radius: 8px; text-align: center; border-left: 5px solid #1e3c72; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                        <div style="font-size: 0.75em; font-weight: bold; color: #666;">OLD TESTAMENT %</div>
-                        <div id="final-percentage-score" style="font-size: 1.8em; font-weight: bold; color: #1e3c72; font-variant-numeric: lining-nums;">0%</div>
+                    <div style="background: #eef2fc; padding: 6px 8px; border-radius: 6px; text-align: center; border-left: 4px solid #1e3c72;">
+                        <div style="font-size: 0.7em; font-weight: bold; color: #666;">OLD TESTAMENT %</div>
+                        <div id="final-percentage-score" style="font-size: 1.3em; font-weight: bold; color: #1e3c72; font-variant-numeric: lining-nums;">0%</div>
                     </div>
-                    <div style="background: #fff; padding: 15px; border-radius: 8px; text-align: center; border-left: 5px solid #2196f3; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                        <div style="font-size: 0.75em; font-weight: bold; color: #666;">NEW TESTAMENT %</div>
-                        <div id="nt-percentage-score" style="font-size: 1.8em; font-weight: bold; color: #2196f3; font-variant-numeric: lining-nums;">Pending</div>
+                    <div style="background: #e8f4fd; padding: 6px 8px; border-radius: 6px; text-align: center; border-left: 4px solid #2196f3;">
+                        <div style="font-size: 0.7em; font-weight: bold; color: #666;">NEW TESTAMENT %</div>
+                        <div id="nt-percentage-score" style="font-size: 1.3em; font-weight: bold; color: #2196f3; font-variant-numeric: lining-nums;">Pending</div>
                     </div>
-                    <div style="background: #fff; padding: 15px; border-radius: 8px; text-align: center; border-left: 5px solid #4caf50; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                        <div style="font-size: 0.75em; font-weight: bold; color: #666;">COMBINED % & GRADE</div>
-                        <div id="combined-percentage-score" style="font-size: 1.4em; font-weight: bold; color: #4caf50; font-variant-numeric: lining-nums;">Pending</div>
-                        <div id="final-grade-display" style="font-size: 1.2em; font-weight: bold; color: #f44336;">-</div>
+                    <div style="background: #edfbf0; padding: 6px 8px; border-radius: 6px; text-align: center; border-left: 4px solid #4caf50;">
+                        <div style="font-size: 0.7em; font-weight: bold; color: #666;">COMBINED % & GRADE</div>
+                        <div id="combined-percentage-score" style="font-size: 1.15em; font-weight: bold; color: #4caf50; font-variant-numeric: lining-nums;">Pending</div>
+                        <div id="final-grade-display" style="font-size: 1em; font-weight: bold; color: #f44336;">-</div>
                     </div>
                 </div>
 
-                <!-- ── OLD TESTAMENT TABLE ── -->
-                <h3 style="color: #1e3c72; border-left: 5px solid #1e3c72; padding-left: 12px; margin-bottom: 10px; font-size: 1.1em; text-transform: uppercase; letter-spacing: 0.5px;">
-                    📖 Old Testament Results
-                </h3>
-                <table style="width: 100%; border-collapse: collapse; font-family: sans-serif; margin-bottom: 30px;">
-                    <thead>
-                        <tr style="background: #1e3c72; color: white;">
-                            <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.9em;">Exam</th>
-                            <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.9em;">Marks</th>
-                            <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.9em;">Out of</th>
-                            <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.9em;">%</th>
-                            <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.9em;">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="marks-table-body"></tbody>
-                </table>
+                <!-- Side-by-side OT and NT tables -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 6px;">
 
-                <!-- ── NEW TESTAMENT TABLE ── -->
-                <h3 style="color: #2196f3; border-left: 5px solid #2196f3; padding-left: 12px; margin-bottom: 10px; font-size: 1.1em; text-transform: uppercase; letter-spacing: 0.5px;">
-                    📘 New Testament Results
-                </h3>
-                <table style="width: 100%; border-collapse: collapse; font-family: sans-serif; margin-bottom: 30px;">
-                    <thead>
-                        <tr style="background: #2196f3; color: white;">
-                            <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.9em;">Exam</th>
-                            <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.9em;">Marks</th>
-                            <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.9em;">Out of</th>
-                            <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.9em;">%</th>
-                            <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.9em;">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="nt-marks-table-body"></tbody>
-                </table>
+                    <!-- ── OLD TESTAMENT ── -->
+                    <div>
+                        <div style="color: #1e3c72; border-left: 4px solid #1e3c72; padding-left: 8px; margin-bottom: 4px; font-size: 0.9em; font-weight: bold; text-transform: uppercase;">
+                            📖 Old Testament
+                        </div>
+                        <table style="width: 100%; border-collapse: collapse; font-family: sans-serif;">
+                            <thead>
+                                <tr style="background: #1e3c72; color: white;">
+                                    <th style="padding: 4px 5px; border: 1px solid #ccc; font-size: 0.78em;">Exam</th>
+                                    <th style="padding: 4px 5px; border: 1px solid #ccc; font-size: 0.78em;">Marks</th>
+                                    <th style="padding: 4px 5px; border: 1px solid #ccc; font-size: 0.78em;">%</th>
+                                    <th style="padding: 4px 5px; border: 1px solid #ccc; font-size: 0.78em;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="marks-table-body"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- ── NEW TESTAMENT ── -->
+                    <div>
+                        <div style="color: #2196f3; border-left: 4px solid #2196f3; padding-left: 8px; margin-bottom: 4px; font-size: 0.9em; font-weight: bold; text-transform: uppercase;">
+                            📘 New Testament
+                        </div>
+                        <table style="width: 100%; border-collapse: collapse; font-family: sans-serif;">
+                            <thead>
+                                <tr style="background: #2196f3; color: white;">
+                                    <th style="padding: 4px 5px; border: 1px solid #ccc; font-size: 0.78em;">Exam</th>
+                                    <th style="padding: 4px 5px; border: 1px solid #ccc; font-size: 0.78em;">Marks</th>
+                                    <th style="padding: 4px 5px; border: 1px solid #ccc; font-size: 0.78em;">%</th>
+                                    <th style="padding: 4px 5px; border: 1px solid #ccc; font-size: 0.78em;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="nt-marks-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
 
                 <!-- ── COMBINED FINAL ROW ── -->
-                <table style="width: 100%; border-collapse: collapse; font-family: sans-serif; margin-bottom: 40px;">
+                <table style="width: 100%; border-collapse: collapse; font-family: sans-serif; margin-bottom: 8px;">
                     <tbody id="combined-table-body"></tbody>
                 </table>
 
-                <!-- Signatures -->
-                <div style="display: flex; justify-content: space-around; align-items: flex-end;">
-                    <div style="text-align: center; width: 220px; display: flex; flex-direction: column; align-items: center;">
-                        <img src="sign with stamp.png" style="width: 140px; height: auto; margin-bottom: 2px;">
-                        <div style="width: 180px; height: 2px; background-color: #1e3c72; margin-bottom: 5px;"></div>
-                        <div style="font-weight: bold; font-size: 0.85em; color: #1e3c72; line-height: 1.2;">
+                <!-- Signatures — compact -->
+                <div style="display: flex; justify-content: space-around; align-items: flex-end; margin-top: 6px;">
+                    <div style="text-align: center; display: flex; flex-direction: column; align-items: center;">
+                        <img src="sign with stamp.png" style="width: 90px; height: auto; margin-bottom: 2px;">
+                        <div style="width: 140px; height: 1px; background-color: #1e3c72; margin-bottom: 3px;"></div>
+                        <div style="font-weight: bold; font-size: 0.78em; color: #1e3c72; line-height: 1.2;">
                             Prabha Sadanand Amolik<br>
-                            <span style="font-size: 0.7em; color: #666; font-weight: normal;">DIRECTOR</span>
+                            <span style="font-size: 0.85em; color: #666; font-weight: normal;">DIRECTOR</span>
                         </div>
                     </div>
-                    <div style="text-align: center; width: 220px; display: flex; flex-direction: column; align-items: center;">
-                        <img src="DIGITAL STAMP.jpeg" style="width: 140px; height: auto; margin-bottom: 2px;">
-                        <div style="width: 180px; height: 2px; background-color: #1e3c72; margin-bottom: 5px;"></div>
-                        <div style="font-weight: bold; font-size: 0.85em; color: #1e3c72; line-height: 1.2;">
+                    <div style="text-align: center; display: flex; flex-direction: column; align-items: center;">
+                        <img src="DIGITAL STAMP.jpeg" style="width: 90px; height: auto; margin-bottom: 2px;">
+                        <div style="width: 140px; height: 1px; background-color: #1e3c72; margin-bottom: 3px;"></div>
+                        <div style="font-weight: bold; font-size: 0.78em; color: #1e3c72; line-height: 1.2;">
                             Sadanand Shamrao Amolik<br>
-                            <span style="font-size: 0.7em; color: #666; font-weight: normal;">DIRECTOR</span>
+                            <span style="font-size: 0.85em; color: #666; font-weight: normal;">DIRECTOR</span>
                         </div>
                     </div>
                 </div>
@@ -345,11 +351,10 @@
             }
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:600;">${examMonths[index]}</td>
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${mark !== null ? mark : 'Absent'}</td>
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">100</td>
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${mark !== null ? mark + '%' : '-'}</td>
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${getStatus(mark)}</td>
+                <td style="padding:3px 5px;border:1px solid #ccc;font-size:0.78em;font-weight:600;">${examMonths[index]}</td>
+                <td style="padding:3px 5px;border:1px solid #ccc;font-size:0.78em;text-align:center;font-variant-numeric:lining-nums;">${mark !== null ? mark : 'Absent'}</td>
+                <td style="padding:3px 5px;border:1px solid #ccc;font-size:0.78em;text-align:center;font-variant-numeric:lining-nums;">${mark !== null ? mark + '%' : '-'}</td>
+                <td style="padding:3px 5px;border:1px solid #ccc;font-size:0.78em;text-align:center;font-weight:600;">${getStatus(mark)}</td>
             `;
             otTableBody.appendChild(row);
         });
@@ -381,11 +386,10 @@
             }
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:600;">${ntExamMonths[index]}</td>
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${mark !== null ? mark : 'Pending'}</td>
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">100</td>
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${mark !== null ? mark + '%' : '-'}</td>
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${getStatus(mark)}</td>
+                <td style="padding:3px 5px;border:1px solid #ccc;font-size:0.78em;font-weight:600;">${ntExamMonths[index]}</td>
+                <td style="padding:3px 5px;border:1px solid #ccc;font-size:0.78em;text-align:center;font-variant-numeric:lining-nums;">${mark !== null ? mark : 'Pending'}</td>
+                <td style="padding:3px 5px;border:1px solid #ccc;font-size:0.78em;text-align:center;font-variant-numeric:lining-nums;">${mark !== null ? mark + '%' : '-'}</td>
+                <td style="padding:3px 5px;border:1px solid #ccc;font-size:0.78em;text-align:center;font-weight:600;">${getStatus(mark)}</td>
             `;
             ntTableBody.appendChild(row);
         });
@@ -413,18 +417,17 @@
         const combinedRow = document.createElement('tr');
         combinedRow.style.background = '#1e3c72';
         combinedRow.innerHTML = `
-            <td style="padding:10px;border:2px solid #1e3c72;font-size:1em;font-weight:900;color:#fff;">
-                🏆 Combined Final Result<br>
-                <span style="font-size:0.75em;font-weight:400;opacity:0.85;">(OT Final % + NT Final %) ÷ 2</span>
+            <td style="padding:7px 8px;border:2px solid #1e3c72;font-size:0.88em;font-weight:900;color:#fff;">
+                🏆 Combined Final Result
+                <span style="font-size:0.75em;font-weight:400;opacity:0.85;display:block;">(OT Final % + NT Final %) ÷ 2</span>
             </td>
-            <td style="padding:10px;border:2px solid #1e3c72;font-size:1em;text-align:center;font-weight:900;color:#fff;font-variant-numeric:lining-nums;">
+            <td style="padding:7px 8px;border:2px solid #1e3c72;font-size:0.88em;text-align:center;font-weight:900;color:#fff;font-variant-numeric:lining-nums;">
                 ${combinedFinal !== null ? combinedFinal + '%' : 'NT Pending'}
             </td>
-            <td style="padding:10px;border:2px solid #1e3c72;font-size:1em;text-align:center;color:#fff;">100</td>
-            <td style="padding:10px;border:2px solid #1e3c72;font-size:1em;text-align:center;font-weight:900;color:#ffd700;font-variant-numeric:lining-nums;">
+            <td style="padding:7px 8px;border:2px solid #1e3c72;font-size:0.88em;text-align:center;font-weight:900;color:#ffd700;font-variant-numeric:lining-nums;">
                 ${combinedFinal !== null ? combinedFinal + '%' : '-'}
             </td>
-            <td style="padding:10px;border:2px solid #1e3c72;font-size:1em;text-align:center;font-weight:900;color:#ffd700;">
+            <td style="padding:7px 8px;border:2px solid #1e3c72;font-size:0.88em;text-align:center;font-weight:900;color:#ffd700;">
                 ${combinedFinal !== null ? calculateGrade(combinedFinal) : 'NT Pending'}
             </td>
         `;
@@ -476,19 +479,19 @@
 
     // ─────────────────────────────────────────────────────────────────────
     //  appendSummaryRows — reusable for both OT and NT tables
-    //  isPending: if true, shows "Pending" in the final row instead of 0%
+    //  NOTE: table has 4 cols (Exam, Marks, %, Status) — no "Out of" col
     // ─────────────────────────────────────────────────────────────────────
     function appendSummaryRows(tableBody, totalOnline, totalPossible, monthlyAvg, actualOffline, weight20, weight80, finalPer, bg1, bg2, bg3, finalLabel, isPending) {
+        const p = 'padding:3px 5px;border:1px solid #ccc;font-size:0.78em;';
 
         // Row 1: Total online
         const r1 = document.createElement('tr');
         r1.style.background = bg1;
         r1.innerHTML = `
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:bold;">Total Online (${totalPossible})</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${totalOnline}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">${totalPossible}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${monthlyAvg.toFixed(2)}%</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${getStatus(monthlyAvg)}</td>
+            <td style="${p}font-weight:bold;">Total Online (${totalPossible})</td>
+            <td style="${p}text-align:center;font-variant-numeric:lining-nums;">${totalOnline}</td>
+            <td style="${p}text-align:center;font-variant-numeric:lining-nums;">${monthlyAvg.toFixed(2)}%</td>
+            <td style="${p}text-align:center;font-weight:600;">${getStatus(monthlyAvg)}</td>
         `;
         tableBody.appendChild(r1);
 
@@ -496,11 +499,10 @@
         const r2 = document.createElement('tr');
         r2.style.background = bg1;
         r2.innerHTML = `
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:bold;">Offline Exam (%)</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${isPending ? 'Pending' : actualOffline}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">100</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${isPending ? '-' : actualOffline + '%'}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${isPending ? 'Pending' : getStatus(actualOffline)}</td>
+            <td style="${p}font-weight:bold;">Offline Exam (%)</td>
+            <td style="${p}text-align:center;font-variant-numeric:lining-nums;">${isPending ? 'Pending' : actualOffline}</td>
+            <td style="${p}text-align:center;font-variant-numeric:lining-nums;">${isPending ? '-' : actualOffline + '%'}</td>
+            <td style="${p}text-align:center;font-weight:600;">${isPending ? 'Pending' : getStatus(actualOffline)}</td>
         `;
         tableBody.appendChild(r2);
 
@@ -508,11 +510,10 @@
         const r3 = document.createElement('tr');
         r3.style.background = bg2;
         r3.innerHTML = `
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:bold;color:#1e3c72;">20% of Online Average</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${weight20.toFixed(2)}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">20</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">-</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${getStatus(monthlyAvg)}</td>
+            <td style="${p}font-weight:bold;color:#1e3c72;">20% of Online Avg</td>
+            <td style="${p}text-align:center;font-variant-numeric:lining-nums;">${weight20.toFixed(2)}</td>
+            <td style="${p}text-align:center;">-</td>
+            <td style="${p}text-align:center;font-weight:600;">${getStatus(monthlyAvg)}</td>
         `;
         tableBody.appendChild(r3);
 
@@ -520,11 +521,10 @@
         const r4 = document.createElement('tr');
         r4.style.background = bg2;
         r4.innerHTML = `
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:bold;color:#1e3c72;">80% of Offline Exam</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${isPending ? 'Pending' : weight80.toFixed(2)}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">80</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">-</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${isPending ? 'Pending' : getStatus(actualOffline)}</td>
+            <td style="${p}font-weight:bold;color:#1e3c72;">80% of Offline Exam</td>
+            <td style="${p}text-align:center;font-variant-numeric:lining-nums;">${isPending ? 'Pending' : weight80.toFixed(2)}</td>
+            <td style="${p}text-align:center;">-</td>
+            <td style="${p}text-align:center;font-weight:600;">${isPending ? 'Pending' : getStatus(actualOffline)}</td>
         `;
         tableBody.appendChild(r4);
 
@@ -532,11 +532,10 @@
         const r5 = document.createElement('tr');
         r5.style.background = bg3;
         r5.innerHTML = `
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.9em;font-weight:900;color:#856404;">${finalLabel}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.9em;text-align:center;font-weight:900;font-variant-numeric:lining-nums;">${isPending ? 'Pending' : finalPer.toFixed(2)}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.9em;text-align:center;font-weight:900;">100</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.9em;text-align:center;font-weight:900;font-variant-numeric:lining-nums;">${isPending ? 'Pending' : finalPer + '%'}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.9em;text-align:center;font-weight:900;">${isPending ? 'Pending' : calculateGrade(finalPer)}</td>
+            <td style="${p}font-weight:900;color:#856404;">${finalLabel}</td>
+            <td style="${p}text-align:center;font-weight:900;font-variant-numeric:lining-nums;">${isPending ? 'Pending' : finalPer.toFixed(2)}</td>
+            <td style="${p}text-align:center;font-weight:900;font-variant-numeric:lining-nums;">${isPending ? 'Pending' : finalPer + '%'}</td>
+            <td style="${p}text-align:center;font-weight:900;">${isPending ? 'Pending' : calculateGrade(finalPer)}</td>
         `;
         tableBody.appendChild(r5);
     }
