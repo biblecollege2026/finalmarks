@@ -155,7 +155,7 @@
             margin: [5, 5, 5, 5],
             filename: `Marksheet_${name}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 1.5, useCORS: true },
+            html2canvas: { scale: 1.5, useCORS: true, windowWidth: 780 },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
@@ -207,7 +207,9 @@
     };
 
     // ─────────────────────────────────────────────────────────────────────
-    //  createMarksheetSection — compact single-A4-page layout
+    //  createMarksheetSection
+    //  Uses HTML <table> for two-column layout (CSS Grid breaks in html2pdf)
+    //  Fixed width 750px so html2pdf renders at a known size
     // ─────────────────────────────────────────────────────────────────────
     function createMarksheetSection() {
         const section = document.createElement('div');
@@ -215,115 +217,123 @@
         section.style.cssText = 'padding: 10px; background: #f8f9fa; display: none;';
 
         section.innerHTML = `
-            <div class="no-print-controls" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                <button class="back-btn" onclick="window.backToDashboardFromMarksheet()" style="padding: 8px 16px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">⬅️ BACK</button>
-                <button id="downloadBtn" onclick="window.downloadMarksheet()" style="padding: 8px 16px; background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">📥 DOWNLOAD PDF</button>
+            <div class="no-print-controls" style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <button onclick="window.backToDashboardFromMarksheet()" style="padding:8px 16px;background:#6c757d;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">⬅️ BACK</button>
+                <button id="downloadBtn" onclick="window.downloadMarksheet()" style="padding:8px 16px;background:#27ae60;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">📥 DOWNLOAD PDF</button>
             </div>
 
-            <div id="marksheet-to-print" style="background: white; padding: 14px 18px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); font-size: 0.82em;">
+            <div id="marksheet-to-print" style="background:white;width:750px;margin:0 auto;padding:12px 16px;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);font-family:sans-serif;font-size:11px;">
 
-                <!-- College Header — compact -->
-                <div style="text-align: center; margin-bottom: 8px; border-bottom: 2px solid #1e3c72; padding-bottom: 6px;">
-                    <h1 style="margin: 0; font-size: 1.5em; color: #1e3c72; font-family: 'Arial Black', Gadget, sans-serif; text-transform: uppercase; line-height: 1.1;">BIBLE COLLEGE OF INDIA PASTORS FOUNDATION</h1>
-                    <p style="margin: 3px 0 0 0; font-size: 0.9em; color: #555; font-weight: 600;">(AFFILIATED TO JESUS LOVES INDIA CHURCH FOUNDATION)</p>
+                <!-- ── COLLEGE HEADER ── -->
+                <div style="text-align:center;margin-bottom:6px;border-bottom:2px solid #1e3c72;padding-bottom:5px;">
+                    <div style="font-size:15px;font-weight:900;color:#1e3c72;text-transform:uppercase;line-height:1.2;font-family:'Arial Black',sans-serif;">
+                        BIBLE COLLEGE OF INDIA PASTORS FOUNDATION
+                    </div>
+                    <div style="font-size:10px;color:#555;font-weight:600;margin-top:2px;">
+                        (AFFILIATED TO JESUS LOVES INDIA CHURCH FOUNDATION)
+                    </div>
                 </div>
 
-                <!-- Student Banner — compact -->
-                <div style="background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%); color: white; padding: 8px 12px; text-align: center; border-radius: 8px; margin-bottom: 8px;">
+                <!-- ── ORANGE BANNER ── -->
+                <div style="background:linear-gradient(135deg,#ff9800,#ff5722);color:white;padding:6px 10px;text-align:center;border-radius:6px;margin-bottom:7px;">
                     <div id="rank-badge-container"></div>
-                    <div style="font-size: 1em; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">
-                        CERTIFICATE IN THEOLOGY (C.T.H) 2025 EXAM RESULT
+                    <div style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:0.5px;">
+                        CERTIFICATE IN THEOLOGY (C.T.H) 2025 EXAM RESULT &nbsp;|&nbsp; Academic Performance
                     </div>
-                    <div style="font-size: 0.9em; font-weight: bold; margin-top: 3px;">Academic Performance</div>
-                    <div id="marksheet-student-name" style="font-size: 1.05em; font-weight: bold; margin-top: 2px;"></div>
-                    <div id="marksheet-student-email-display" style="font-size: 0.8em; opacity: 0.85;"></div>
+                    <div id="marksheet-student-name" style="font-size:12px;font-weight:bold;margin-top:2px;"></div>
+                    <div id="marksheet-student-email-display" style="font-size:10px;opacity:0.85;"></div>
                 </div>
 
-                <!-- Summary Cards — 4 columns compact -->
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 8px;">
-                    <div style="background: #f8f0ff; padding: 6px 8px; border-radius: 6px; text-align: center; border-left: 4px solid #9c27b0;">
-                        <div style="font-size: 0.7em; font-weight: bold; color: #666;">OT ONLINE EXAMS</div>
-                        <div id="online-exams-taken" style="font-size: 1.3em; font-weight: bold; color: #9c27b0; font-variant-numeric: lining-nums;">0/7</div>
-                    </div>
-                    <div style="background: #eef2fc; padding: 6px 8px; border-radius: 6px; text-align: center; border-left: 4px solid #1e3c72;">
-                        <div style="font-size: 0.7em; font-weight: bold; color: #666;">OLD TESTAMENT %</div>
-                        <div id="final-percentage-score" style="font-size: 1.3em; font-weight: bold; color: #1e3c72; font-variant-numeric: lining-nums;">0%</div>
-                    </div>
-                    <div style="background: #e8f4fd; padding: 6px 8px; border-radius: 6px; text-align: center; border-left: 4px solid #2196f3;">
-                        <div style="font-size: 0.7em; font-weight: bold; color: #666;">NEW TESTAMENT %</div>
-                        <div id="nt-percentage-score" style="font-size: 1.3em; font-weight: bold; color: #2196f3; font-variant-numeric: lining-nums;">Pending</div>
-                    </div>
-                    <div style="background: #edfbf0; padding: 6px 8px; border-radius: 6px; text-align: center; border-left: 4px solid #4caf50;">
-                        <div style="font-size: 0.7em; font-weight: bold; color: #666;">COMBINED % & GRADE</div>
-                        <div id="combined-percentage-score" style="font-size: 1.15em; font-weight: bold; color: #4caf50; font-variant-numeric: lining-nums;">Pending</div>
-                        <div id="final-grade-display" style="font-size: 1em; font-weight: bold; color: #f44336;">-</div>
-                    </div>
-                </div>
+                <!-- ── SUMMARY CARDS (4-col HTML table — safe for html2pdf) ── -->
+                <table style="width:100%;border-collapse:separate;border-spacing:5px;margin-bottom:7px;">
+                    <tr>
+                        <td style="background:#f8f0ff;border-left:4px solid #9c27b0;padding:4px 6px;border-radius:4px;text-align:center;">
+                            <div style="font-size:9px;font-weight:bold;color:#666;">OT ONLINE EXAMS</div>
+                            <div id="online-exams-taken" style="font-size:14px;font-weight:bold;color:#9c27b0;">0/7</div>
+                        </td>
+                        <td style="background:#eef2fc;border-left:4px solid #1e3c72;padding:4px 6px;border-radius:4px;text-align:center;">
+                            <div style="font-size:9px;font-weight:bold;color:#666;">OLD TESTAMENT %</div>
+                            <div id="final-percentage-score" style="font-size:14px;font-weight:bold;color:#1e3c72;">0%</div>
+                        </td>
+                        <td style="background:#e8f4fd;border-left:4px solid #2196f3;padding:4px 6px;border-radius:4px;text-align:center;">
+                            <div style="font-size:9px;font-weight:bold;color:#666;">NEW TESTAMENT %</div>
+                            <div id="nt-percentage-score" style="font-size:14px;font-weight:bold;color:#2196f3;">Pending</div>
+                        </td>
+                        <td style="background:#edfbf0;border-left:4px solid #4caf50;padding:4px 6px;border-radius:4px;text-align:center;">
+                            <div style="font-size:9px;font-weight:bold;color:#666;">COMBINED % &amp; GRADE</div>
+                            <div id="combined-percentage-score" style="font-size:13px;font-weight:bold;color:#4caf50;">Pending</div>
+                            <div id="final-grade-display" style="font-size:11px;font-weight:bold;color:#f44336;">-</div>
+                        </td>
+                    </tr>
+                </table>
 
-                <!-- Side-by-side OT and NT tables -->
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 6px;">
+                <!-- ── SIDE-BY-SIDE TABLES (HTML table layout — reliable in html2pdf) ── -->
+                <table style="width:100%;border-collapse:collapse;margin-bottom:6px;">
+                    <tr style="vertical-align:top;">
 
-                    <!-- ── OLD TESTAMENT ── -->
-                    <div>
-                        <div style="color: #1e3c72; border-left: 4px solid #1e3c72; padding-left: 8px; margin-bottom: 4px; font-size: 0.9em; font-weight: bold; text-transform: uppercase;">
-                            📖 Old Testament
-                        </div>
-                        <table style="width: 100%; border-collapse: collapse; font-family: sans-serif;">
-                            <thead>
-                                <tr style="background: #1e3c72; color: white;">
-                                    <th style="padding: 4px 5px; border: 1px solid #ccc; font-size: 0.78em;">Exam</th>
-                                    <th style="padding: 4px 5px; border: 1px solid #ccc; font-size: 0.78em;">Marks</th>
-                                    <th style="padding: 4px 5px; border: 1px solid #ccc; font-size: 0.78em;">%</th>
-                                    <th style="padding: 4px 5px; border: 1px solid #ccc; font-size: 0.78em;">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="marks-table-body"></tbody>
-                        </table>
-                    </div>
+                        <!-- LEFT: OLD TESTAMENT -->
+                        <td style="width:49%;padding-right:6px;">
+                            <div style="color:#1e3c72;border-left:3px solid #1e3c72;padding-left:6px;margin-bottom:3px;font-size:10px;font-weight:bold;text-transform:uppercase;">
+                                📖 Old Testament
+                            </div>
+                            <table style="width:100%;border-collapse:collapse;">
+                                <thead>
+                                    <tr style="background:#1e3c72;color:white;">
+                                        <th style="padding:3px 4px;border:1px solid #ccc;font-size:9px;text-align:left;">Exam</th>
+                                        <th style="padding:3px 4px;border:1px solid #ccc;font-size:9px;">Marks</th>
+                                        <th style="padding:3px 4px;border:1px solid #ccc;font-size:9px;">%</th>
+                                        <th style="padding:3px 4px;border:1px solid #ccc;font-size:9px;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="marks-table-body"></tbody>
+                            </table>
+                        </td>
 
-                    <!-- ── NEW TESTAMENT ── -->
-                    <div>
-                        <div style="color: #2196f3; border-left: 4px solid #2196f3; padding-left: 8px; margin-bottom: 4px; font-size: 0.9em; font-weight: bold; text-transform: uppercase;">
-                            📘 New Testament
-                        </div>
-                        <table style="width: 100%; border-collapse: collapse; font-family: sans-serif;">
-                            <thead>
-                                <tr style="background: #2196f3; color: white;">
-                                    <th style="padding: 4px 5px; border: 1px solid #ccc; font-size: 0.78em;">Exam</th>
-                                    <th style="padding: 4px 5px; border: 1px solid #ccc; font-size: 0.78em;">Marks</th>
-                                    <th style="padding: 4px 5px; border: 1px solid #ccc; font-size: 0.78em;">%</th>
-                                    <th style="padding: 4px 5px; border: 1px solid #ccc; font-size: 0.78em;">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="nt-marks-table-body"></tbody>
-                        </table>
-                    </div>
-                </div>
+                        <td style="width:2%;"></td>
+
+                        <!-- RIGHT: NEW TESTAMENT -->
+                        <td style="width:49%;padding-left:6px;">
+                            <div style="color:#2196f3;border-left:3px solid #2196f3;padding-left:6px;margin-bottom:3px;font-size:10px;font-weight:bold;text-transform:uppercase;">
+                                📘 New Testament
+                            </div>
+                            <table style="width:100%;border-collapse:collapse;">
+                                <thead>
+                                    <tr style="background:#2196f3;color:white;">
+                                        <th style="padding:3px 4px;border:1px solid #ccc;font-size:9px;text-align:left;">Exam</th>
+                                        <th style="padding:3px 4px;border:1px solid #ccc;font-size:9px;">Marks</th>
+                                        <th style="padding:3px 4px;border:1px solid #ccc;font-size:9px;">%</th>
+                                        <th style="padding:3px 4px;border:1px solid #ccc;font-size:9px;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="nt-marks-table-body"></tbody>
+                            </table>
+                        </td>
+
+                    </tr>
+                </table>
 
                 <!-- ── COMBINED FINAL ROW ── -->
-                <table style="width: 100%; border-collapse: collapse; font-family: sans-serif; margin-bottom: 8px;">
+                <table style="width:100%;border-collapse:collapse;margin-bottom:8px;">
                     <tbody id="combined-table-body"></tbody>
                 </table>
 
-                <!-- Signatures — compact -->
-                <div style="display: flex; justify-content: space-around; align-items: flex-end; margin-top: 6px;">
-                    <div style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-                        <img src="sign with stamp.png" style="width: 90px; height: auto; margin-bottom: 2px;">
-                        <div style="width: 140px; height: 1px; background-color: #1e3c72; margin-bottom: 3px;"></div>
-                        <div style="font-weight: bold; font-size: 0.78em; color: #1e3c72; line-height: 1.2;">
-                            Prabha Sadanand Amolik<br>
-                            <span style="font-size: 0.85em; color: #666; font-weight: normal;">DIRECTOR</span>
-                        </div>
-                    </div>
-                    <div style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-                        <img src="DIGITAL STAMP.jpeg" style="width: 90px; height: auto; margin-bottom: 2px;">
-                        <div style="width: 140px; height: 1px; background-color: #1e3c72; margin-bottom: 3px;"></div>
-                        <div style="font-weight: bold; font-size: 0.78em; color: #1e3c72; line-height: 1.2;">
-                            Sadanand Shamrao Amolik<br>
-                            <span style="font-size: 0.85em; color: #666; font-weight: normal;">DIRECTOR</span>
-                        </div>
-                    </div>
-                </div>
+                <!-- ── SIGNATURES ── -->
+                <table style="width:100%;border-collapse:collapse;margin-top:6px;">
+                    <tr>
+                        <td style="text-align:center;width:50%;">
+                            <img src="sign with stamp.png" style="width:80px;height:auto;display:block;margin:0 auto 2px auto;">
+                            <div style="width:140px;height:1px;background:#1e3c72;margin:0 auto 3px auto;"></div>
+                            <div style="font-size:10px;font-weight:bold;color:#1e3c72;">Prabha Sadanand Amolik</div>
+                            <div style="font-size:9px;color:#666;">DIRECTOR</div>
+                        </td>
+                        <td style="text-align:center;width:50%;">
+                            <img src="DIGITAL STAMP.jpeg" style="width:80px;height:auto;display:block;margin:0 auto 2px auto;">
+                            <div style="width:140px;height:1px;background:#1e3c72;margin:0 auto 3px auto;"></div>
+                            <div style="font-size:10px;font-weight:bold;color:#1e3c72;">Sadanand Shamrao Amolik</div>
+                            <div style="font-size:9px;color:#666;">DIRECTOR</div>
+                        </td>
+                    </tr>
+                </table>
 
             </div><!-- end #marksheet-to-print -->
         `;
