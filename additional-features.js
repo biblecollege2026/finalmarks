@@ -151,48 +151,15 @@
         const btn = document.getElementById('downloadBtn');
         btn.innerText = "⌛ Processing...";
 
-        const originalWidth    = element.style.width;
-        const originalMaxWidth = element.style.maxWidth;
-        const originalMargin   = element.style.margin;
-        const originalRadius   = element.style.borderRadius;
-        const originalShadow   = element.style.boxShadow;
-
-        element.style.width       = '754px';
-        element.style.maxWidth    = '754px';
-        element.style.margin      = '0';
-        element.style.borderRadius = '0';
-        element.style.boxShadow   = 'none';
-
         const opt = {
-            margin: [8, 20, 8, 20],
+            margin: [5, 5, 5, 5],
             filename: `Marksheet_${name}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: {
-                scale: 2,
-                useCORS: true,
-                allowTaint: true,
-                scrollX: 0,
-                scrollY: 0,
-                width: 754,
-                windowWidth: 794
-            },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
         html2pdf().set(opt).from(element).save().then(() => {
-            element.style.width       = originalWidth;
-            element.style.maxWidth    = originalMaxWidth;
-            element.style.margin      = originalMargin;
-            element.style.borderRadius = originalRadius;
-            element.style.boxShadow   = originalShadow;
-            btn.innerText = "📥 DOWNLOAD PDF";
-        }).catch(() => {
-            element.style.width       = originalWidth;
-            element.style.maxWidth    = originalMaxWidth;
-            element.style.margin      = originalMargin;
-            element.style.borderRadius = originalRadius;
-            element.style.boxShadow   = originalShadow;
             btn.innerText = "📥 DOWNLOAD PDF";
         });
     };
@@ -247,102 +214,85 @@
     function createMarksheetSection() {
         const section = document.createElement('div');
         section.id = 'marksheetSection';
-        section.style.cssText = 'padding:10px;background:#f0f4f8;display:none;';
+        section.style.cssText = 'padding:10px;background:#f8f9fa;display:none;';
 
         section.innerHTML = `
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
                 <button onclick="window.backToDashboardFromMarksheet()" style="padding:8px 16px;background:#6c757d;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">⬅️ BACK</button>
                 <button id="downloadBtn" onclick="window.downloadMarksheet()" style="padding:8px 16px;background:#27ae60;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">📥 DOWNLOAD PDF</button>
             </div>
 
-            <div id="marksheet-to-print" style="
-                background:white;
-                width:100%;max-width:754px;margin:0 auto;
-                padding:10px 14px;
-                border-radius:10px;
-                box-shadow:0 0 12px rgba(0,0,0,0.12);
-                font-family:'Arial',sans-serif;
-                font-size:10px;
-                box-sizing:border-box;
-                overflow:visible;
-                display:flex;flex-direction:column;
-            ">
+            <div id="marksheet-to-print" style="background:white;width:100%;padding:12px 16px;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);font-family:sans-serif;font-size:11px;box-sizing:border-box;">
 
                 <!-- COLLEGE HEADER -->
-                <div style="text-align:center;margin-bottom:4px;padding-bottom:4px;border-bottom:2.5px solid #1e3c72;">
-                    <div style="font-size:13px;font-weight:900;color:#1e3c72;text-transform:uppercase;letter-spacing:0.5px;font-family:'Arial Black',sans-serif;line-height:1.2;">BIBLE COLLEGE OF INDIA PASTORS FOUNDATION</div>
-                    <div style="font-size:7.5px;color:#555;font-weight:600;margin-top:1px;letter-spacing:0.3px;">(AFFILIATED TO JESUS LOVES INDIA CHURCH FOUNDATION)</div>
+                <div style="text-align:center;margin-bottom:5px;border-bottom:2px solid #1e3c72;padding-bottom:4px;">
+                    <div style="font-size:15px;font-weight:900;color:#1e3c72;text-transform:uppercase;line-height:1.2;font-family:'Arial Black',sans-serif;">BIBLE COLLEGE OF INDIA PASTORS FOUNDATION</div>
+                    <div style="font-size:9px;color:#555;font-weight:600;margin-top:1px;">(AFFILIATED TO JESUS LOVES INDIA CHURCH FOUNDATION)</div>
                 </div>
 
                 <!-- ORANGE BANNER -->
-                <div style="background:linear-gradient(135deg,#ff9800,#ff5722);color:white;padding:5px 10px;text-align:center;border-radius:5px;margin-bottom:5px;">
-                    <div id="rank-badge-container" style="margin-bottom:2px;"></div>
-                    <div style="font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:0.8px;">CERTIFICATE IN THEOLOGY (C.T.H) 2025 EXAM RESULT &nbsp;|&nbsp; Academic Performance</div>
-                    <div id="marksheet-student-name" style="font-size:12px;font-weight:900;margin-top:2px;letter-spacing:0.5px;font-family:'Arial Black',sans-serif;"></div>
-                    <div id="marksheet-student-email-display" style="font-size:7px;opacity:0.85;margin-top:1px;"></div>
+                <div style="background:linear-gradient(135deg,#ff9800,#ff5722);color:white;padding:4px 10px;text-align:center;border-radius:5px;margin-bottom:5px;">
+                    <div id="rank-badge-container"></div>
+                    <div style="font-size:9px;font-weight:900;text-transform:uppercase;">CERTIFICATE IN THEOLOGY (C.T.H) 2025 EXAM RESULT &nbsp;|&nbsp; Academic Performance</div>
+                    <div id="marksheet-student-name" style="font-size:11px;font-weight:bold;margin-top:1px;"></div>
+                    <div id="marksheet-student-email-display" style="font-size:8px;opacity:0.85;"></div>
                 </div>
 
-                <!-- SUMMARY CARDS -->
-                <table style="width:100%;border-collapse:separate;border-spacing:3px;margin-bottom:5px;">
+                <!-- SUMMARY CARDS: Total /12, OT%, NT%, Combined% -->
+                <table style="width:100%;border-collapse:separate;border-spacing:4px;margin-bottom:6px;">
                     <tr>
-                        <td style="background:#f8f0ff;border-left:3px solid #9c27b0;padding:3px 5px;border-radius:3px;text-align:center;">
-                            <div style="font-size:7px;font-weight:700;color:#888;text-transform:uppercase;">Total Online Exams</div>
-                            <div id="online-exams-taken" style="font-size:12px;font-weight:900;color:#9c27b0;line-height:1.2;">0/12</div>
-                            <div style="font-size:6.5px;color:#aaa;">(OT:7 + NT:5)</div>
+                        <td style="background:#f8f0ff;border-left:4px solid #9c27b0;padding:4px 6px;border-radius:4px;text-align:center;">
+                            <div style="font-size:8px;font-weight:bold;color:#666;">TOTAL ONLINE EXAMS</div>
+                            <div id="online-exams-taken" style="font-size:13px;font-weight:bold;color:#9c27b0;">0/12</div>
+                            <div style="font-size:7px;color:#999;">(OT:7 + NT:5)</div>
                         </td>
-                        <td style="background:#eef2fc;border-left:3px solid #1e3c72;padding:3px 5px;border-radius:3px;text-align:center;">
-                            <div style="font-size:7px;font-weight:700;color:#888;text-transform:uppercase;">Old Testament %</div>
-                            <div id="final-percentage-score" style="font-size:12px;font-weight:900;color:#1e3c72;line-height:1.2;">0%</div>
+                        <td style="background:#eef2fc;border-left:4px solid #1e3c72;padding:4px 6px;border-radius:4px;text-align:center;">
+                            <div style="font-size:8px;font-weight:bold;color:#666;">OLD TESTAMENT %</div>
+                            <div id="final-percentage-score" style="font-size:13px;font-weight:bold;color:#1e3c72;">0%</div>
                         </td>
-                        <td style="background:#e8f4fd;border-left:3px solid #2196f3;padding:3px 5px;border-radius:3px;text-align:center;">
-                            <div style="font-size:7px;font-weight:700;color:#888;text-transform:uppercase;">New Testament %</div>
-                            <div id="nt-percentage-score" style="font-size:12px;font-weight:900;color:#2196f3;line-height:1.2;">Pending</div>
+                        <td style="background:#e8f4fd;border-left:4px solid #2196f3;padding:4px 6px;border-radius:4px;text-align:center;">
+                            <div style="font-size:8px;font-weight:bold;color:#666;">NEW TESTAMENT %</div>
+                            <div id="nt-percentage-score" style="font-size:13px;font-weight:bold;color:#2196f3;">Pending</div>
                         </td>
-                        <td style="background:#edfbf0;border-left:3px solid #4caf50;padding:3px 5px;border-radius:3px;text-align:center;">
-                            <div style="font-size:7px;font-weight:700;color:#888;text-transform:uppercase;">Combined % &amp; Grade</div>
-                            <div id="combined-percentage-score" style="font-size:12px;font-weight:900;color:#4caf50;line-height:1.2;">Pending</div>
-                            <div id="final-grade-display" style="font-size:9px;font-weight:900;color:#f44336;">-</div>
+                        <td style="background:#edfbf0;border-left:4px solid #4caf50;padding:4px 6px;border-radius:4px;text-align:center;">
+                            <div style="font-size:8px;font-weight:bold;color:#666;">COMBINED % &amp; GRADE</div>
+                            <div id="combined-percentage-score" style="font-size:13px;font-weight:bold;color:#4caf50;">Pending</div>
+                            <div id="final-grade-display" style="font-size:10px;font-weight:bold;color:#f44336;">-</div>
                         </td>
                     </tr>
                 </table>
 
-                <!-- MAIN TABLE -->
-                <table style="width:100%;border-collapse:collapse;margin-bottom:5px;">
+                <!-- SINGLE MAIN TABLE — OT then NT then Combined -->
+                <table style="width:100%;border-collapse:collapse;margin-bottom:6px;">
                     <thead>
                         <tr style="background:#2c3e50;color:white;">
-                            <th style="padding:3px 5px;border:1px solid #555;font-size:8px;text-align:left;width:38%;">Exam</th>
-                            <th style="padding:3px 5px;border:1px solid #555;font-size:8px;width:14%;">Marks</th>
-                            <th style="padding:3px 5px;border:1px solid #555;font-size:8px;width:12%;">Out of</th>
-                            <th style="padding:3px 5px;border:1px solid #555;font-size:8px;width:13%;">%</th>
-                            <th style="padding:3px 5px;border:1px solid #555;font-size:8px;width:23%;">Status</th>
+                            <th style="padding:4px 6px;border:1px solid #bbb;font-size:9px;text-align:left;width:38%;">Exam</th>
+                            <th style="padding:4px 6px;border:1px solid #bbb;font-size:9px;width:14%;">Marks</th>
+                            <th style="padding:4px 6px;border:1px solid #bbb;font-size:9px;width:12%;">Out of</th>
+                            <th style="padding:4px 6px;border:1px solid #bbb;font-size:9px;width:13%;">%</th>
+                            <th style="padding:4px 6px;border:1px solid #bbb;font-size:9px;width:23%;">Status</th>
                         </tr>
                     </thead>
                     <tbody id="main-table-body"></tbody>
                 </table>
 
-                <!-- SIGNATURES — always at bottom -->
-                <div style="margin-top:auto;padding-top:8px;border-top:1px solid #ddd;">
-                    <table style="width:100%;border-collapse:collapse;">
-                        <tr>
-                            <td style="text-align:center;width:50%;padding:4px 0;">
-                                <img src="https://raw.githubusercontent.com/biblecollege2026/finalmarks/main/sign%20with%20stamp.png"
-                                     crossorigin="anonymous"
-                                     style="width:65px;height:auto;display:block;margin:0 auto 3px auto;">
-                                <div style="width:110px;height:1px;background:#1e3c72;margin:0 auto 2px auto;"></div>
-                                <div style="font-size:8px;font-weight:700;color:#1e3c72;">Prabha Sadanand Amolik</div>
-                                <div style="font-size:7px;color:#777;text-transform:uppercase;letter-spacing:0.5px;">Director</div>
-                            </td>
-                            <td style="text-align:center;width:50%;padding:4px 0;">
-                                <img src="https://raw.githubusercontent.com/biblecollege2026/finalmarks/main/DIGITAL%20STAMP.jpeg"
-                                     crossorigin="anonymous"
-                                     style="width:65px;height:auto;display:block;margin:0 auto 3px auto;">
-                                <div style="width:110px;height:1px;background:#1e3c72;margin:0 auto 2px auto;"></div>
-                                <div style="font-size:8px;font-weight:700;color:#1e3c72;">Sadanand Shamrao Amolik</div>
-                                <div style="font-size:7px;color:#777;text-transform:uppercase;letter-spacing:0.5px;">Director</div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                <!-- SIGNATURES -->
+                <table style="width:100%;border-collapse:collapse;margin-top:5px;">
+                    <tr>
+                        <td style="text-align:center;width:50%;padding-top:4px;">
+                            <img src="sign with stamp.png" style="width:70px;height:auto;display:block;margin:0 auto 2px auto;">
+                            <div style="width:120px;height:1px;background:#1e3c72;margin:0 auto 2px auto;"></div>
+                            <div style="font-size:9px;font-weight:bold;color:#1e3c72;">Prabha Sadanand Amolik</div>
+                            <div style="font-size:8px;color:#666;">DIRECTOR</div>
+                        </td>
+                        <td style="text-align:center;width:50%;padding-top:4px;">
+                            <img src="DIGITAL STAMP.jpeg" style="width:70px;height:auto;display:block;margin:0 auto 2px auto;">
+                            <div style="width:120px;height:1px;background:#1e3c72;margin:0 auto 2px auto;"></div>
+                            <div style="font-size:9px;font-weight:bold;color:#1e3c72;">Sadanand Shamrao Amolik</div>
+                            <div style="font-size:8px;color:#666;">DIRECTOR</div>
+                        </td>
+                    </tr>
+                </table>
 
             </div>
         `;
@@ -353,8 +303,8 @@
     //  populateMarksheet — single table: OT rows, NT rows, combined row
     // ─────────────────────────────────────────────────────────────────────
     function populateMarksheet(studentMarksData, studentProfileData, email) {
-        const p  = 'padding:2px 4px;border:1px solid #ccc;font-size:8px;';
-        const pc = 'padding:2px 4px;border:1px solid #ccc;font-size:8px;text-align:center;';
+        const p  = 'padding:3px 5px;border:1px solid #ccc;font-size:9px;';
+        const pc = 'padding:3px 5px;border:1px solid #ccc;font-size:9px;text-align:center;';
 
         const tableBody = document.getElementById('main-table-body');
         tableBody.innerHTML = '';
@@ -368,7 +318,7 @@
 
         // OT section header row
         const otHeader = document.createElement('tr');
-        otHeader.innerHTML = `<td colspan="5" style="padding:3px 5px;background:#1e3c72;color:white;font-size:8px;font-weight:900;letter-spacing:0.5px;">📖 OLD TESTAMENT (7 Online Exams)</td>`;
+        otHeader.innerHTML = `<td colspan="5" style="padding:4px 6px;background:#1e3c72;color:white;font-size:9px;font-weight:900;letter-spacing:0.5px;">📖 OLD TESTAMENT (7 Online Exams)</td>`;
         tableBody.appendChild(otHeader);
 
         // OT exam rows
@@ -406,7 +356,7 @@
 
         // NT section header row
         const ntHeader = document.createElement('tr');
-        ntHeader.innerHTML = `<td colspan="5" style="padding:3px 5px;background:#2196f3;color:white;font-size:8px;font-weight:900;letter-spacing:0.5px;">📘 NEW TESTAMENT (5 Online Exams)</td>`;
+        ntHeader.innerHTML = `<td colspan="5" style="padding:4px 6px;background:#2196f3;color:white;font-size:9px;font-weight:900;letter-spacing:0.5px;">📘 NEW TESTAMENT (5 Online Exams)</td>`;
         tableBody.appendChild(ntHeader);
 
         // NT exam rows
@@ -439,14 +389,14 @@
         const combRow = document.createElement('tr');
         combRow.style.background = '#1e3c72';
         combRow.innerHTML = `
-            <td style="padding:3px 5px;border:1px solid #1e3c72;font-size:8px;font-weight:900;color:#fff;">
+            <td style="padding:5px 6px;border:1px solid #1e3c72;font-size:9px;font-weight:900;color:#fff;">
                 🏆 Combined Final Result
-                <span style="font-size:7px;font-weight:400;opacity:0.85;display:block;">(OT% + NT%) ÷ 2</span>
+                <span style="font-size:8px;font-weight:400;opacity:0.85;display:block;">(OT% + NT%) ÷ 2</span>
             </td>
-            <td style="padding:3px 5px;border:1px solid #1e3c72;font-size:8px;text-align:center;font-weight:900;color:#fff;">${combined !== null ? combined : 'NT Pending'}</td>
-            <td style="padding:3px 5px;border:1px solid #1e3c72;font-size:8px;text-align:center;font-weight:900;color:#fff;">100</td>
-            <td style="padding:3px 5px;border:1px solid #1e3c72;font-size:8px;text-align:center;font-weight:900;color:#ffd700;">${combined !== null ? combined + '%' : '-'}</td>
-            <td style="padding:3px 5px;border:1px solid #1e3c72;font-size:8px;text-align:center;font-weight:900;color:#ffd700;">${combined !== null ? calculateGrade(combined) : 'NT Pending'}</td>
+            <td style="padding:5px 6px;border:1px solid #1e3c72;font-size:9px;text-align:center;font-weight:900;color:#fff;">${combined !== null ? combined : 'NT Pending'}</td>
+            <td style="padding:5px 6px;border:1px solid #1e3c72;font-size:9px;text-align:center;font-weight:900;color:#fff;">100</td>
+            <td style="padding:5px 6px;border:1px solid #1e3c72;font-size:9px;text-align:center;font-weight:900;color:#ffd700;">${combined !== null ? combined + '%' : '-'}</td>
+            <td style="padding:5px 6px;border:1px solid #1e3c72;font-size:9px;text-align:center;font-weight:900;color:#ffd700;">${combined !== null ? calculateGrade(combined) : 'NT Pending'}</td>
         `;
         tableBody.appendChild(combRow);
 
