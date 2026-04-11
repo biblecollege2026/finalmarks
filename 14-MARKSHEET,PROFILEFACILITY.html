@@ -609,23 +609,23 @@
         }
 
 
-        @media print {
-            @page {
-                size: A4;
-                margin: 0.3cm;
-            }
-            
-            body * {
-                visibility: hidden !important;
-            }
-            
-            /* Add #print-container and its children to the visible elements */
-            #marksheet-to-print,
-            #marksheet-to-print *,
-            #print-container, /* ADD THIS LINE */
-            #print-container * { /* ADD THIS LINE */
-                visibility: visible !important;
-            }
+      @media print {
+    /* Prevent the calculations table from being split across pages */
+    table, .summary-card {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* Force the New Testament to stay together */
+    #nt-marks-table-body tr {
+        page-break-inside: avoid;
+    }
+
+    /* Optional: Shrink the scale slightly if it still feels too tight */
+    body {
+        zoom: 95%;
+    }
+}
             
             #marksheet-to-print {
                 position: absolute !important;
