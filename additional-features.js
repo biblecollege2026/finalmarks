@@ -151,11 +151,21 @@
         const btn = document.getElementById('downloadBtn');
         btn.innerText = "⌛ Processing...";
 
+        window.scrollTo(0, 0);
+
         const opt = {
             margin: [5, 5, 5, 5],
             filename: `Marksheet_${name}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true, windowWidth: 794 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                scrollX: 0,
+                scrollY: 0,
+                windowWidth: element.scrollWidth,
+                windowHeight: element.scrollHeight
+            },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
