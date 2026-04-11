@@ -240,7 +240,26 @@
                 </div>
 
                 <!-- Summary Cards: OT%, NT%, Combined%, Grade -->
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px;">
+                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;">
+    ${['OT ONLINE EXAMS', 'OLD TESTAMENT %', 'NEW TESTAMENT %', 'COMBINED % & GRADE'].map((title, i) => `
+        <div class="summary-card" style="
+            background: ${i === 3 ? 'linear-gradient(135deg, #1e3c72, #2a5298)' : 'linear-gradient(135deg, #ff9966, #ff5e62)'}; 
+            padding: 10px; 
+            border-radius: 8px; 
+            text-align: center;
+            min-height: 85px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        ">
+            <p style="font-size: 0.65rem; margin: 0 0 5px 0; color: white; opacity: 0.9; text-transform: uppercase;">${title}</p>
+            <h2 id="${['ot-exams-display', 'ot-final-display', 'nt-final-display', 'combined-display'][i]}" 
+                style="font-size: 1.1rem; margin: 0; color: white; font-weight: 800;">0</h2>
+        </div>
+    `).join('')}
+</div>
+               
                     <div style="background: #fff; padding: 15px; border-radius: 8px; text-align: center; border-left: 5px solid #9c27b0; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
                         <div style="font-size: 0.75em; font-weight: bold; color: #666;">OT ONLINE EXAMS</div>
                         <div id="online-exams-taken" style="font-size: 1.8em; font-weight: bold; color: #9c27b0; font-variant-numeric: lining-nums;">0/7</div>
@@ -344,15 +363,15 @@
                 otExamsTaken++;
             }
             const row = document.createElement('tr');
+
+
             row.innerHTML = `
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:600;">${examMonths[index]}</td>
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${mark !== null ? mark : 'Absent'}</td>
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">100</td>
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${mark !== null ? mark + '%' : '-'}</td>
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${getStatus(mark)}</td>
-            `;
-            otTableBody.appendChild(row);
-        });
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; font-weight: 600;">${months[index]}</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center;">${mark !== null ? mark : '-'}</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center;">100</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center;">${mark !== null ? mark + '%' : '-'}</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center; font-weight: 600;">${getStatus(mark)}</td>
+`;
 
         // OT calculations
         const otMonthlyAvg   = (otTotalOnline / 700) * 100;
@@ -380,13 +399,14 @@
                 ntExamsTaken++;
             }
             const row = document.createElement('tr');
+
             row.innerHTML = `
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:600;">${ntExamMonths[index]}</td>
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${mark !== null ? mark : 'Pending'}</td>
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">100</td>
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${mark !== null ? mark + '%' : '-'}</td>
-                <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${getStatus(mark)}</td>
-            `;
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; font-weight: 600;">${ntExamMonths[index]}</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center;">${ntMark !== null ? ntMark : 'Pending'}</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center;">100</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center;">${ntMark !== null ? ntMark + '%' : '-'}</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center; font-weight: 600;">${getStatus(ntMark)}</td>
+`;
             ntTableBody.appendChild(row);
         });
 
@@ -484,60 +504,60 @@
         const r1 = document.createElement('tr');
         r1.style.background = bg1;
         r1.innerHTML = `
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:bold;">Total Online (${totalPossible})</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${totalOnline}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">${totalPossible}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${monthlyAvg.toFixed(2)}%</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${getStatus(monthlyAvg)}</td>
-        `;
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; font-weight: 900;">Total Online (700)</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center; font-weight: 900;">${totalOnline}</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center; font-weight: 900;">700</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center; font-weight: 900;">${onlineAvg.toFixed(2)}%</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center; font-weight: 900;">${getStatus(onlineAvg)}</td>
+`;
         tableBody.appendChild(r1);
 
         // Row 2: Offline exam
         const r2 = document.createElement('tr');
         r2.style.background = bg1;
         r2.innerHTML = `
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:bold;">Offline Exam (%)</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${isPending ? 'Pending' : actualOffline}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">100</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${isPending ? '-' : actualOffline + '%'}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${isPending ? 'Pending' : getStatus(actualOffline)}</td>
-        `;
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; font-weight: 900;">Offline Exam (%)</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center; font-weight: 900;">${actualOffline}</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center; font-weight: 900;">100</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center; font-weight: 900;">${actualOffline}%</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center; font-weight: 900;">${getStatus(actualOffline)}</td>
+`;
         tableBody.appendChild(r2);
 
         // Row 3: 20% weightage
         const r3 = document.createElement('tr');
         r3.style.background = bg2;
         r3.innerHTML = `
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:bold;color:#1e3c72;">20% of Online Average</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${weight20.toFixed(2)}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">20</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">-</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${getStatus(monthlyAvg)}</td>
-        `;
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem;">20% of Online Average</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center;">${(onlineAvg * 0.20).toFixed(2)}</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center;">20</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center;">-</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center;">${getStatus(onlineAvg)}</td>
+`;
         tableBody.appendChild(r3);
 
         // Row 4: 80% weightage
         const r4 = document.createElement('tr');
         r4.style.background = bg2;
         r4.innerHTML = `
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;font-weight:bold;color:#1e3c72;">80% of Offline Exam</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-variant-numeric:lining-nums;">${isPending ? 'Pending' : weight80.toFixed(2)}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">80</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;">-</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.85em;text-align:center;font-weight:600;">${isPending ? 'Pending' : getStatus(actualOffline)}</td>
-        `;
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem;">80% of Offline Exam</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center;">${(actualOffline * 0.80).toFixed(2)}</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center;">80</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center;">-</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center;">${getStatus(actualOffline)}</td>
+`;
         tableBody.appendChild(r4);
 
         // Row 5: Final result for this testament
         const r5 = document.createElement('tr');
         r5.style.background = bg3;
         r5.innerHTML = `
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.9em;font-weight:900;color:#856404;">${finalLabel}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.9em;text-align:center;font-weight:900;font-variant-numeric:lining-nums;">${isPending ? 'Pending' : finalPer.toFixed(2)}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.9em;text-align:center;font-weight:900;">100</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.9em;text-align:center;font-weight:900;font-variant-numeric:lining-nums;">${isPending ? 'Pending' : finalPer + '%'}</td>
-            <td style="padding:6px;border:1px solid #ddd;font-size:0.9em;text-align:center;font-weight:900;">${isPending ? 'Pending' : calculateGrade(finalPer)}</td>
-        `;
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; font-weight: 900;">Final Result</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center; font-weight: 900;">${finalPer.toFixed(2)}</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center; font-weight: 900;">100</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center; font-weight: 900;">${finalPer}%</td>
+    <td style="padding: 4px 8px; border: 1px solid #ddd; font-size: 0.75rem; text-align: center; font-weight: 900;">${calculateGrade(finalPer)}</td>
+`;
         tableBody.appendChild(r5);
     }
 
