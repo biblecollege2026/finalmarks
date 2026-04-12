@@ -50,28 +50,28 @@ const STUDENT_DATA = {
     //  and set offlineMark once May 2026 exam is done.
     // ─────────────────────────────────────────────
     ntMarks: {
-        'manoramaramane@gmail.com':      { marks: [null, null, null, null, null], offlineMark: null },
-        'rvpardhe07@gmail.com':          { marks: [null, null, null, null, null], offlineMark: null },
+        'manoramaramane@gmail.com':      { marks: [98, 95, 90, 91, null], offlineMark: null },
+        'rvpardhe07@gmail.com':          { marks: [91, 96, 90, 92, null], offlineMark: null },
         'vypardh78@gmail.com':           { marks: [null, null, null, null, null], offlineMark: null },
         'aadamgujare@gmail.com':         { marks: [null, null, null, null, null], offlineMark: null },
         'ranjeeta.kamble333@gmail.com':  { marks: [null, null, null, null, null], offlineMark: null },
-        'p82158860@gmail.com':           { marks: [null, null, null, null, null], offlineMark: null },
-        'buddhiwantmeene@gmail.com':     { marks: [null, null, null, null, null], offlineMark: null },
-        'khilarelajo@gmail.com':         { marks: [null, null, null, null, null], offlineMark: null },
-        'fkhilare@gmail.com':            { marks: [null, null, null, null, null], offlineMark: null },
-        'bhaleraojitesh727@gmail.com':   { marks: [null, null, null, null, null], offlineMark: null },
-        'dpadvi604@gmail.com':           { marks: [null, null, null, null, null], offlineMark: null },
-        'bordeamol26@gmail.com':         { marks: [null, null, null, null, null], offlineMark: null },
+        'p82158860@gmail.com':           { marks: [93, 86, 90, 84, null], offlineMark: null },
+        'buddhiwantmeene@gmail.com':     { marks: [75, 93, 88, 87, null], offlineMark: null },
+        'khilarelajo@gmail.com':         { marks: [71, 98, 85, 90, null], offlineMark: null },
+        'fkhilare@gmail.com':            { marks: [53, 93, 45, 87, null], offlineMark: null },
+        'bhaleraojitesh727@gmail.com':   { marks: [49, 100, 45, null, null], offlineMark: null },
+        'dpadvi604@gmail.com':           { marks: [80, 96, 41, null, null], offlineMark: null },
+        'bordeamol26@gmail.com':         { marks: [100, 50, 87, 89, null], offlineMark: null },
         'borde.siyona@gmail.com':        { marks: [null, null, null, null, null], offlineMark: null },
-        'manisha.fernandis15@gmail.com': { marks: [null, null, null, null, null], offlineMark: null },
-         'hiwalefrancis@gmail.com':         { marks: [null, null, null, null, null], offlineMark: null },
+        'manisha.fernandis15@gmail.com': { marks: [32, 98, 41, 72, null], offlineMark: null },
+         'hiwalefrancis@gmail.com':         { marks: [93, 98, null, null, null], offlineMark: null },
         'jadhavsushma05@gmail.com':        { marks: [null, null, null, null, null], offlineMark: null },
         'shwetadalge14@gmail.com': { marks: [null, null, null, null, null], offlineMark: null },
         'meghadhusia09june@gmail.com':   { marks: [null, null, null, null, null], offlineMark: null },
-        'ashubaladon@gmail.com':         { marks: [87, 56, 98, 78, 91], offlineMark: 80 },
+        'ashubaladon@gmail.com':         { marks: [45, null, null, null, null], offlineMark: 80 },
         'vishforluv1982@gmail.com':      { marks: [null, null, null, null, null], offlineMark: null },
-        'brani4211@gmail.com':           { marks: [null, null, null, null, null], offlineMark: null },
-        'michaelsalvi9324@gmail.com':    { marks: [null, null, null, null, null], offlineMark: null }
+        'brani4211@gmail.com':           { marks: [73, 49, 38, 91, null], offlineMark: null },
+        'michaelsalvi9324@gmail.com':    { marks: [51, 76, 85, 88, null], offlineMark: null }
     },
 
     // NT online exam labels (5 exams — May 2026 offline handled separately)
