@@ -25,6 +25,9 @@ const STUDENT_DATA = {
         'ashubaladon@gmail.com':         { name: 'Ashish Dongerdive',     marks: [75, 70, null, null, null, null, null], offlineMark: 84 },
         'vishforluv1982@gmail.com':      { name: 'Vishwas Bhosale',       marks: [62, 50, null, 100, 40, null, null], offlineMark: 43 },
         'brani4211@gmail.com':           { name: 'Rani Bhosale',          marks: [null, null, null, null, null, null, null], offlineMark: 46 },
+         'hiwalefrancis@gmail.com': { name: 'Francis hiwali', marks: [95, 100, 95, null, 100, 100, 93], offlineMark: 77.50 },
+        'jadhavsushma05@gmail.com': { name: 'Sushma Jadhav', marks: [55, 40, 62, null, 55, 57, 55], offlineMark: 42 },
+        'shwetadalge14@gmail.com': { name: 'Shweta Shirish dalge', marks: [94, 53, 92, 70, 75, 57, 77], offlineMark: 76 },
         'michaelsalvi9324@gmail.com':    { name: 'Michael Salvi',         marks: [93, 70, 100, 74, 100, 100, 83], offlineMark: 47 }
     },
 
@@ -61,6 +64,9 @@ const STUDENT_DATA = {
         'bordeamol26@gmail.com':         { marks: [null, null, null, null, null], offlineMark: null },
         'borde.siyona@gmail.com':        { marks: [null, null, null, null, null], offlineMark: null },
         'manisha.fernandis15@gmail.com': { marks: [null, null, null, null, null], offlineMark: null },
+         'hiwalefrancis@gmail.com':         { marks: [null, null, null, null, null], offlineMark: null },
+        'jadhavsushma05@gmail.com':        { marks: [null, null, null, null, null], offlineMark: null },
+        'shwetadalge14@gmail.com': { marks: [null, null, null, null, null], offlineMark: null },
         'meghadhusia09june@gmail.com':   { marks: [null, null, null, null, null], offlineMark: null },
         'ashubaladon@gmail.com':         { marks: [87, 56, 98, 78, 91], offlineMark: 80 },
         'vishforluv1982@gmail.com':      { marks: [null, null, null, null, null], offlineMark: null },
