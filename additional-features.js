@@ -113,6 +113,16 @@
                     ⬅ BACK TO DASHBOARD
                 </button>
 
+                <!-- In the marksheet header, replace or update the title area -->
+              <div style="text-align: center; padding: 20px 0 10px 0;">
+           <img 
+        src="https://raw.githubusercontent.com/sam411042/finalmarks/main/logogbibleclllege.jpeg" 
+        alt="Bible College of India Logo"
+        style="width: 100px; height: 100px; object-fit: contain; margin-bottom: 10px;"
+        onerror="this.style.display='none'"
+               />
+
+
                 <div style="text-align:center;margin-bottom:25px;border-bottom:2px solid #eee;padding-bottom:20px;">
                     <h1 style="margin:0;font-size:2.2em;color:#1e3c72;font-family:'Arial Black',Gadget,sans-serif;
                                text-transform:uppercase;line-height:1.2;">
