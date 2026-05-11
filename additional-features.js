@@ -360,7 +360,7 @@
                         <div id="rank-badge-container" style="margin-bottom:2px;"></div>
                         <div style="font-size:7.5pt;font-weight:900;text-transform:uppercase;
                                     letter-spacing:1.2px;color:#ffd54f;font-family:Arial,sans-serif;">
-                            Certificate in Theology (C.T.H) — 2025 Examination Result
+                            Certificate in Theology (C.T.H) — 2025-2026 Examination Result
                         </div>
                         <div id="marksheet-student-name"
                              style="font-size:13pt;font-weight:900;margin-top:2px;
@@ -610,33 +610,23 @@
         `;
         tableBody.appendChild(combRow);
 
-        // ── RANKING BADGE — uses Combined Final (OT+NT÷2) when available, else OT only ──
-const allScores = Object.keys(STUDENT_DATA.marks).map(e => {
-    // OT final
-    const m      = STUDENT_DATA.marks[e];
-    const otAvg  = (m.marks.reduce((a, b) => (typeof b === 'number' ? a + b : a), 0) / 700) * 100;
-    const otOff  = (typeof m.offlineMark === 'number') ? m.offlineMark : 0;
-    const eFinal = parseFloat(((otAvg * 0.20) + (otOff * 0.80)).toFixed(2));
+       // sort descending
+allStudentScores.sort((a, b) => b.score - a.score);
 
-    // NT final (if available)
-    const ntD    = (typeof STUDENT_DATA.ntMarks !== 'undefined') ? STUDENT_DATA.ntMarks[e] : null;
-    const ntReady = ntD && ntD.offlineMark !== null &&
-                    typeof ntD.offlineMark === 'number' &&
-                    ntD.marks.some(mk => mk !== null);
-
-    if (ntReady) {
-        const ntAvg  = (ntD.marks.reduce((a, b) => (typeof b === 'number' ? a + b : a), 0) / 500) * 100;
-        const ntOff  = ntD.offlineMark;
-        const nFinal = parseFloat(((ntAvg * 0.20) + (ntOff * 0.80)).toFixed(2));
-        return parseFloat(((eFinal + nFinal) / 2).toFixed(2));  // combined
+// competition ranking: if tie → same rank, next gets skipped rank (1,1,3)
+allStudentScores.forEach((s, i) => {
+    if (i === 0) {
+        s.rank = 1;
+    } else if (s.score === allStudentScores[i - 1].score) {
+        s.rank = allStudentScores[i - 1].rank; // same rank if tied
+    } else {
+        s.rank = i + 1; // actual position
     }
+});
 
-    return eFinal; // fallback to OT only if NT not ready
-}).sort((a, b) => b - a);
-
-// current student's score for comparison
-const myScore = (combined !== null) ? combined : otFinal;
-const rank    = allScores.indexOf(myScore) + 1;
+// find this student by email
+const myEntry = allStudentScores.find(s => s.email === email);
+const rank    = myEntry ? myEntry.rank : 0;
 
 const rankContainer = document.getElementById('rank-badge-container');
 rankContainer.innerHTML = '';
