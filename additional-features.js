@@ -610,35 +610,52 @@
         `;
         tableBody.appendChild(combRow);
 
-        // ── RANKING BADGE ─────────────────────────────────────────────────
-        const allScores = Object.keys(STUDENT_DATA.marks).map(e => {
-            const m   = STUDENT_DATA.marks[e];
-            const avg = (m.marks.reduce((a, b) =>
-                (typeof b === 'number' ? a + b : a), 0) / 700) * 100;
-            const off = (typeof m.offlineMark === 'number') ? m.offlineMark : 0;
-            return parseFloat(((avg * 0.20) + (off * 0.80)).toFixed(2));
-        }).sort((a, b) => b - a);
+        // ── RANKING BADGE — uses Combined Final (OT+NT÷2) when available, else OT only ──
+const allScores = Object.keys(STUDENT_DATA.marks).map(e => {
+    // OT final
+    const m      = STUDENT_DATA.marks[e];
+    const otAvg  = (m.marks.reduce((a, b) => (typeof b === 'number' ? a + b : a), 0) / 700) * 100;
+    const otOff  = (typeof m.offlineMark === 'number') ? m.offlineMark : 0;
+    const eFinal = parseFloat(((otAvg * 0.20) + (otOff * 0.80)).toFixed(2));
 
-        const rank          = allScores.indexOf(otFinal) + 1;
-        const rankContainer = document.getElementById('rank-badge-container');
-        rankContainer.innerHTML = '';
+    // NT final (if available)
+    const ntD    = (typeof STUDENT_DATA.ntMarks !== 'undefined') ? STUDENT_DATA.ntMarks[e] : null;
+    const ntReady = ntD && ntD.offlineMark !== null &&
+                    typeof ntD.offlineMark === 'number' &&
+                    ntD.marks.some(mk => mk !== null);
 
-        if (rank > 0 && rank <= 5) {
-            const medals = ['🥇', '🥈', '🥉', '🏅', '🏅'];
-            const badge  = document.createElement('div');
-            badge.style.cssText = `
-                display:inline-flex;align-items:center;gap:5px;
-                background:#c8a951;color:#1a237e;
-                padding:2px 14px;border-radius:20px;
-                font-weight:900;font-size:8pt;
-                border:1.5px solid #fff;
-                font-family:Arial,sans-serif;letter-spacing:0.5px;
-                text-transform:uppercase;margin-bottom:3px;
-                -webkit-print-color-adjust:exact;print-color-adjust:exact;
-            `;
-            badge.innerHTML = `${medals[rank - 1]} Class Rank #${rank} — Top Performer`;
-            rankContainer.appendChild(badge);
-        }
+    if (ntReady) {
+        const ntAvg  = (ntD.marks.reduce((a, b) => (typeof b === 'number' ? a + b : a), 0) / 500) * 100;
+        const ntOff  = ntD.offlineMark;
+        const nFinal = parseFloat(((ntAvg * 0.20) + (ntOff * 0.80)).toFixed(2));
+        return parseFloat(((eFinal + nFinal) / 2).toFixed(2));  // combined
+    }
+
+    return eFinal; // fallback to OT only if NT not ready
+}).sort((a, b) => b - a);
+
+// current student's score for comparison
+const myScore = (combined !== null) ? combined : otFinal;
+const rank    = allScores.indexOf(myScore) + 1;
+
+const rankContainer = document.getElementById('rank-badge-container');
+rankContainer.innerHTML = '';
+if (rank > 0 && rank <= 5) {
+    const medals = ['🥇', '🥈', '🥉', '🏅', '🏅'];
+    const badge  = document.createElement('div');
+    badge.style.cssText = `
+        display:inline-flex;align-items:center;gap:5px;
+        background:#c8a951;color:#1a237e;
+        padding:2px 14px;border-radius:20px;
+        font-weight:900;font-size:8pt;
+        border:1.5px solid #fff;
+        font-family:Arial,sans-serif;letter-spacing:0.5px;
+        text-transform:uppercase;margin-bottom:3px;
+        -webkit-print-color-adjust:exact;print-color-adjust:exact;
+    `;
+    badge.innerHTML = `${medals[rank - 1]} Class Rank #${rank} — Top Performer`;
+    rankContainer.appendChild(badge);
+}
 
         // ── UPDATE SUMMARY CARDS ──────────────────────────────────────────
         document.getElementById('marksheet-student-name').textContent          = studentProfileData?.name || email;
