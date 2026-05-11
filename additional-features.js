@@ -408,59 +408,29 @@
         tableBody.appendChild(combRow);
 
         // ── RANKING ──────────────────────────────────────────────────────
-        const allScores = Object.keys(STUDENT_DATA.marks)
-    .filter(e => e !== 'jlibiblecollege@gmail.com')  // ← exclude admin
-    .map(e => {
-        const m      = STUDENT_DATA.marks[e];
-        const otAvg  = (m.marks.reduce((a, b) => (typeof b === 'number' ? a + b : a), 0) / 700) * 100;
-        const otOff  = (typeof m.offlineMark === 'number') ? m.offlineMark : 0;
-        const eFinal = parseFloat(((otAvg * 0.20) + (otOff * 0.80)).toFixed(2));
+        const allScores = Object.keys(STUDENT_DATA.marks).map(e => {
+            const m   = STUDENT_DATA.marks[e];
+            const avg = (m.marks.reduce((a, b) => (typeof b === 'number' ? a + b : a), 0) / 700) * 100;
+            const off = (typeof m.offlineMark === 'number') ? m.offlineMark : 0;
+            return parseFloat(((avg * 0.20) + (off * 0.80)).toFixed(2));
+        }).sort((a, b) => b - a);
 
-        const ntD     = (typeof STUDENT_DATA.ntMarks !== 'undefined') ? STUDENT_DATA.ntMarks[e] : null;
-        const ntReady = ntD && typeof ntD.offlineMark === 'number' &&
-                        ntD.marks.some(mk => mk !== null);
-
-        if (ntReady) {
-            const ntAvg  = (ntD.marks.reduce((a, b) => (typeof b === 'number' ? a + b : a), 0) / 500) * 100;
-            const nFinal = parseFloat(((ntAvg * 0.20) + (ntD.offlineMark * 0.80)).toFixed(2));
-            return { email: e, score: parseFloat(((eFinal + nFinal) / 2).toFixed(2)) };
+        const rank = allScores.indexOf(otFinal) + 1;
+        const rankContainer = document.getElementById('rank-badge-container');
+        rankContainer.innerHTML = '';
+        if (rank > 0 && rank <= 5) {
+            const badge = document.createElement('div');
+            badge.style.cssText = `
+                background:#ffd700;color:#000;padding:0 10px;border-radius:20px;
+                font-weight:900;display:inline-flex;align-items:center;
+                height:16px;line-height:1;margin-bottom:2px;
+                border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,0.2);
+                font-size:8px;text-transform:uppercase;
+                font-family:'Segoe UI',Roboto,Arial,sans-serif;
+            `;
+            badge.innerHTML = `🏆 TOP <span style="margin:0 3px;">${rank}</span> RANK`;
+            rankContainer.appendChild(badge);
         }
-        return { email: e, score: eFinal };
-    });
-
-allScores.sort((a, b) => b.score - a.score);
-
-allScores.forEach((s, i) => {
-    if (i === 0) {
-        s.rank = 1;
-    } else if (s.score === allScores[i - 1].score) {
-        s.rank = allScores[i - 1].rank;
-    } else {
-        s.rank = i + 1;
-    }
-});
-
-const myEntry = allScores.find(s => s.email === email);
-const rank    = myEntry ? myEntry.rank : 0;
-
-const rankContainer = document.getElementById('rank-badge-container');
-rankContainer.innerHTML = '';
-if (rank > 0 && rank <= 3) {
-    const medals = ['🥇', '🥈', '🥉'];
-    const badge  = document.createElement('div');
-    badge.style.cssText = `
-        display:inline-flex;align-items:center;gap:5px;
-        background:#c8a951;color:#1a237e;
-        padding:2px 14px;border-radius:20px;
-        font-weight:900;font-size:8pt;
-        border:1.5px solid #fff;
-        font-family:Arial,sans-serif;letter-spacing:0.5px;
-        text-transform:uppercase;margin-bottom:3px;
-        -webkit-print-color-adjust:exact;print-color-adjust:exact;
-    `;
-    badge.innerHTML = `${medals[rank - 1]} Class Rank #${rank} — Top Performer`;
-    rankContainer.appendChild(badge);
-}
 
         // ── UPDATE SUMMARY CARDS ─────────────────────────────────────────
         document.getElementById('marksheet-student-name').textContent    = studentProfileData?.name || email;
