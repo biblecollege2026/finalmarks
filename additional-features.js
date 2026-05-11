@@ -611,21 +611,21 @@
         tableBody.appendChild(combRow);
 
        // sort descending
-allStudentScores.sort((a, b) => b.score - a.score);
+allScores.sort((a, b) => b.score - a.score);
 
 // competition ranking: if tie → same rank, next gets skipped rank (1,1,3)
-allStudentScores.forEach((s, i) => {
+allScores.forEach((s, i) => {
     if (i === 0) {
         s.rank = 1;
-    } else if (s.score === allStudentScores[i - 1].score) {
-        s.rank = allStudentScores[i - 1].rank; // same rank if tied
+    } else if (s.score === allScores[i - 1].score) {
+        s.rank = allScores[i - 1].rank; // same rank if tied
     } else {
         s.rank = i + 1; // actual position
     }
 });
 
 // find this student by email
-const myEntry = allStudentScores.find(s => s.email === email);
+const myEntry = allScores.find(s => s.email === email);
 const rank    = myEntry ? myEntry.rank : 0;
 
 const rankContainer = document.getElementById('rank-badge-container');
