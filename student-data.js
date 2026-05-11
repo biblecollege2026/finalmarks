@@ -56,7 +56,7 @@ const STUDENT_DATA = {
         'aadamgujare@gmail.com':         { marks: [null, null, null, null, null], offlineMark: null },
         'ranjeeta.kamble333@gmail.com':  { marks: [96, 90, 94, 91, 95], offlineMark: 76 },
         'p82158860@gmail.com':           { marks: [93, 86, 90, 84, 81], offlineMark: 65 },
-        'buddhiwantmeene@gmail.com':     { marks: [75, 90, 85, 80, 68], offlineMark: 64 },
+        'buddhiwantmeene@gmail.com':     { marks: [75, 90, 85, 80, 68], offlineMark: 62 },
         'khilarelajo@gmail.com':         { marks: [71, 98, 85, 90, 59], offlineMark: 61 },
         'fkhilare@gmail.com':            { marks: [53, 93, 45, 87, 13], offlineMark: 50 },
         'bhaleraojitesh727@gmail.com':   { marks: [49, 100, 45, null, 52], offlineMark: 59 },
