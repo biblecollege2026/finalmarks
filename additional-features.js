@@ -640,8 +640,8 @@ const rank    = allScores.indexOf(myScore) + 1;
 
 const rankContainer = document.getElementById('rank-badge-container');
 rankContainer.innerHTML = '';
-if (rank > 0 && rank <= 5) {
-    const medals = ['🥇', '🥈', '🥉', '🏅', '🏅'];
+if (rank > 0 && rank <= 3) {
+    const medals = ['🥇', '🥈', '🥉'];
     const badge  = document.createElement('div');
     badge.style.cssText = `
         display:inline-flex;align-items:center;gap:5px;
