@@ -614,6 +614,28 @@
 
 // competition ranking: if tie → same rank, next gets skipped rank (1,1,3)
 // sort descending
+        // --- GENERATE ALL SCORES FOR RANKING ---
+const allScores = [];
+Object.keys(STUDENT_DATA.profiles).forEach(stEmail => {
+    // Skip the admin email if necessary
+    if (stEmail === 'jlibiblecollege@gmail.com') return;
+
+    const otData = STUDENT_DATA.marks[stEmail];
+    const ntData = STUDENT_DATA.ntMarks ? STUDENT_DATA.ntMarks[stEmail] : null;
+
+    if (otData && ntData && otData.offlineMark !== null && ntData.offlineMark !== null) {
+        // Calculate OT Final
+        const otAvg = (otData.marks.reduce((a, b) => (a || 0) + (b || 0), 0) / 700) * 100;
+        const otFin = (otAvg * 0.20) + (otData.offlineMark * 0.80);
+
+        // Calculate NT Final
+        const ntAvg = (ntData.marks.reduce((a, b) => (a || 0) + (b || 0), 0) / 500) * 100;
+        const ntFin = (ntAvg * 0.20) + (ntData.offlineMark * 0.80);
+
+        const combinedScore = parseFloat(((otFin + ntFin) / 2).toFixed(2));
+        allScores.push({ email: stEmail, score: combinedScore });
+    }
+});
 allScores.sort((a, b) => b.score - a.score);
 
 allScores.forEach((s, i) => {
