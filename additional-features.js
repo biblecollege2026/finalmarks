@@ -350,21 +350,23 @@ window.downloadMarksheet = function () {
             </div>
 
             <!-- ══════════ PRINTABLE A4 SHEET ══════════ -->
-            <div id="marksheet-to-print" style="
-                background:#fffdf5;
-                width:100%;max-width:794px;
-                margin:0 auto;
-                padding:12mm 14mm 10mm 14mm;
-                box-sizing:border-box;
-                border-radius:6px;
-                box-shadow:0 6px 28px rgba(0,0,0,0.22);
-                font-family:'Georgia','Times New Roman',serif;
-                font-size:9pt;
-                position:relative;
-                overflow:hidden;
-                -webkit-print-color-adjust:exact;
-                print-color-adjust:exact;
-            ">
+    <dic id ="marksheet-to-print" style=" 
+    background:#fffdf5;
+    width:100%;
+    max-width:794px;
+    min-width:0;
+    margin:0 auto;
+    padding:clamp(8px,3vw,30mm) clamp(8px,3.5vw,36mm) clamp(8px,2.5vw,26mm) clamp(8px,3.5vw,36mm);
+    box-sizing:border-box;
+    border-radius:6px;
+    box-shadow:0 6px 28px rgba(0,0,0,0.22);
+    font-family:'Georgia','Times New Roman',serif;
+    font-size:clamp(7pt,1.1vw,9pt);
+    position:relative;
+    overflow:hidden;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+    ">
                 <!-- decorative double border -->
                 <div style="position:absolute;top:5px;left:5px;right:5px;bottom:5px;
                             border:3px double #1a237e;border-radius:4px;pointer-events:none;z-index:0;
@@ -565,6 +567,22 @@ window.downloadMarksheet = function () {
                         print-color-adjust: exact !important;
                     }
                 }
+
+                @media screen and (max-width: 600px) {
+    #marksheet-to-print {
+        font-size: 7pt !important;
+        padding: 8px !important;
+    }
+    #marksheet-to-print table {
+        font-size: 7pt !important;
+    }
+    /* Summary cards — stack 2×2 on very narrow phones * /
+    #marksheet-to-print > div > table:first-of-type td {
+        display: block;
+        width: 100% !important;
+        margin-bottom: 4px;
+    }
+}
             </style>
         `;
         return section;
