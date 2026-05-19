@@ -178,93 +178,39 @@
     // ─────────────────────────────────────────────────────────────────────
     // 5. DOWNLOAD MARKSHEET  — scale:3, pagebreak avoid-all, A4 tight margin
     // ─────────────────────────────────────────────────────────────────────
-    
-window.downloadMarksheet = function () {
-    const originalEl = document.getElementById('marksheet-to-print');
-    const name       = document.getElementById('marksheet-student-name').textContent.trim();
-    const btn        = document.getElementById('downloadBtn');
- 
-    btn.innerText = '⌛ Processing...';
-    btn.disabled  = true;
- 
-    // ── 1. CREATE AN OFF-SCREEN CLONE AT EXACT A4 WIDTH ──────────────────
-    // On mobile the element may be narrower than 794px.
-    // We clone it, force it to 794px, render that, then remove it.
-    const clone = originalEl.cloneNode(true);
- 
-    clone.style.cssText = `
-        position: fixed !important;
-        top: -9999px !important;
-        left: -9999px !important;
-        width: 794px !important;
-        max-width: 794px !important;
-        min-width: 794px !important;
-        padding: 12mm 14mm 10mm 14mm !important;
-        box-sizing: border-box !important;
-        background: #fffdf5 !important;
-        font-family: 'Georgia','Times New Roman',serif !important;
-        font-size: 9pt !important;
-        overflow: visible !important;
-        box-shadow: none !important;
-        border-radius: 0 !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        zoom: 1 !important;
-        transform: none !important;
-    `;
- 
-    document.body.appendChild(clone);
- 
-    // Small delay so browser lays out the clone before capture
-    setTimeout(() => {
+    window.downloadMarksheet = function () {
+        const element = document.getElementById('marksheet-to-print');
+        const name    = document.getElementById('marksheet-student-name').textContent.trim();
+        const btn     = document.getElementById('downloadBtn');
+        btn.innerText = '⌛ Processing...';
+        btn.disabled  = true;
+
         const opt = {
-            margin:      [6, 6, 6, 6],          // mm — tight but safe
+            margin:      [8, 8, 8, 8],
             filename:    `Marksheet_${name}.pdf`,
-            image:       { type: 'jpeg', quality: 0.99 },
+            image:       { type: 'jpeg', quality: 0.98 },
             html2canvas: {
-                scale:           2,              // 2 is stable on mobile; 3 can OOM
+                scale:           3,
                 useCORS:         true,
                 allowTaint:      true,
                 logging:         false,
                 letterRendering: true,
-                width:           794,            // force A4 pixel width
-                windowWidth:     794,            // tell html2canvas viewport = 794px
-                scrollX:         0,
-                scrollY:         0,
-                backgroundColor: '#fffdf5',
             },
             jsPDF: {
                 unit:        'mm',
                 format:      'a4',
                 orientation: 'portrait',
                 compress:    true,
-                hotfixes:    ['px_scaling'],     // jsPDF hotfix for pixel accuracy
             },
-            pagebreak: {
-                mode:   ['avoid-all', 'css', 'legacy'],
-                before: '.page-break-before',
-                after:  '.page-break-after',
-                avoid:  'tr, td, .no-break',
-            },
+            pagebreak: { mode: 'avoid-all' },
         };
- 
-        html2pdf()
-            .set(opt)
-            .from(clone)
-            .save()
-            .then(() => {
-                document.body.removeChild(clone);
-                btn.innerText = '📥 DOWNLOAD PDF';
-                btn.disabled  = false;
-            })
-            .catch((err) => {
-                console.error('PDF generation failed:', err);
-                document.body.removeChild(clone);
-                btn.innerText = '❌ Retry Download';
-                btn.disabled  = false;
-            });
-    }, 200);
-};
+
+        html2pdf().set(opt).from(element).save().then(() => {
+            btn.innerText = '📥 DOWNLOAD PDF';
+            btn.disabled  = false;
+        });
+    };
+
     // ─────────────────────────────────────────────────────────────────────
     // 6. NAVIGATION HELPERS
     // ─────────────────────────────────────────────────────────────────────
@@ -350,23 +296,21 @@ window.downloadMarksheet = function () {
             </div>
 
             <!-- ══════════ PRINTABLE A4 SHEET ══════════ -->
-    <dic id ="marksheet-to-print" style=" 
-    background:#fffdf5;
-    width:100%;
-    max-width:794px;
-    min-width:0;
-    margin:0 auto;
-    padding:clamp(8px,3vw,30mm) clamp(8px,3.5vw,36mm) clamp(8px,2.5vw,26mm) clamp(8px,3.5vw,36mm);
-    box-sizing:border-box;
-    border-radius:6px;
-    box-shadow:0 6px 28px rgba(0,0,0,0.22);
-    font-family:'Georgia','Times New Roman',serif;
-    font-size:clamp(7pt,1.1vw,9pt);
-    position:relative;
-    overflow:hidden;
-    -webkit-print-color-adjust:exact;
-    print-color-adjust:exact;
-    ">
+            <div id="marksheet-to-print" style="
+                background:#fffdf5;
+                width:100%;max-width:794px;
+                margin:0 auto;
+                padding:12mm 14mm 10mm 14mm;
+                box-sizing:border-box;
+                border-radius:6px;
+                box-shadow:0 6px 28px rgba(0,0,0,0.22);
+                font-family:'Georgia','Times New Roman',serif;
+                font-size:9pt;
+                position:relative;
+                overflow:hidden;
+                -webkit-print-color-adjust:exact;
+                print-color-adjust:exact;
+            ">
                 <!-- decorative double border -->
                 <div style="position:absolute;top:5px;left:5px;right:5px;bottom:5px;
                             border:3px double #1a237e;border-radius:4px;pointer-events:none;z-index:0;
@@ -567,22 +511,6 @@ window.downloadMarksheet = function () {
                         print-color-adjust: exact !important;
                     }
                 }
-
-                @media screen and (max-width: 600px) {
-    #marksheet-to-print {
-        font-size: 7pt !important;
-        padding: 8px !important;
-    }
-    #marksheet-to-print table {
-        font-size: 7pt !important;
-    }
-    /* Summary cards — stack 2×2 on very narrow phones * /
-    #marksheet-to-print > div > table:first-of-type td {
-        display: block;
-        width: 100% !important;
-        margin-bottom: 4px;
-    }
-}
             </style>
         `;
         return section;
