@@ -178,39 +178,93 @@
     // ─────────────────────────────────────────────────────────────────────
     // 5. DOWNLOAD MARKSHEET  — scale:3, pagebreak avoid-all, A4 tight margin
     // ─────────────────────────────────────────────────────────────────────
-    window.downloadMarksheet = function () {
-        const element = document.getElementById('marksheet-to-print');
-        const name    = document.getElementById('marksheet-student-name').textContent.trim();
-        const btn     = document.getElementById('downloadBtn');
-        btn.innerText = '⌛ Processing...';
-        btn.disabled  = true;
-
+    
+window.downloadMarksheet = function () {
+    const originalEl = document.getElementById('marksheet-to-print');
+    const name       = document.getElementById('marksheet-student-name').textContent.trim();
+    const btn        = document.getElementById('downloadBtn');
+ 
+    btn.innerText = '⌛ Processing...';
+    btn.disabled  = true;
+ 
+    // ── 1. CREATE AN OFF-SCREEN CLONE AT EXACT A4 WIDTH ──────────────────
+    // On mobile the element may be narrower than 794px.
+    // We clone it, force it to 794px, render that, then remove it.
+    const clone = originalEl.cloneNode(true);
+ 
+    clone.style.cssText = `
+        position: fixed !important;
+        top: -9999px !important;
+        left: -9999px !important;
+        width: 794px !important;
+        max-width: 794px !important;
+        min-width: 794px !important;
+        padding: 12mm 14mm 10mm 14mm !important;
+        box-sizing: border-box !important;
+        background: #fffdf5 !important;
+        font-family: 'Georgia','Times New Roman',serif !important;
+        font-size: 9pt !important;
+        overflow: visible !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        zoom: 1 !important;
+        transform: none !important;
+    `;
+ 
+    document.body.appendChild(clone);
+ 
+    // Small delay so browser lays out the clone before capture
+    setTimeout(() => {
         const opt = {
-            margin:      [8, 8, 8, 8],
+            margin:      [6, 6, 6, 6],          // mm — tight but safe
             filename:    `Marksheet_${name}.pdf`,
-            image:       { type: 'jpeg', quality: 0.98 },
+            image:       { type: 'jpeg', quality: 0.99 },
             html2canvas: {
-                scale:           3,
+                scale:           2,              // 2 is stable on mobile; 3 can OOM
                 useCORS:         true,
                 allowTaint:      true,
                 logging:         false,
                 letterRendering: true,
+                width:           794,            // force A4 pixel width
+                windowWidth:     794,            // tell html2canvas viewport = 794px
+                scrollX:         0,
+                scrollY:         0,
+                backgroundColor: '#fffdf5',
             },
             jsPDF: {
                 unit:        'mm',
                 format:      'a4',
                 orientation: 'portrait',
                 compress:    true,
+                hotfixes:    ['px_scaling'],     // jsPDF hotfix for pixel accuracy
             },
-            pagebreak: { mode: 'avoid-all' },
+            pagebreak: {
+                mode:   ['avoid-all', 'css', 'legacy'],
+                before: '.page-break-before',
+                after:  '.page-break-after',
+                avoid:  'tr, td, .no-break',
+            },
         };
-
-        html2pdf().set(opt).from(element).save().then(() => {
-            btn.innerText = '📥 DOWNLOAD PDF';
-            btn.disabled  = false;
-        });
-    };
-
+ 
+        html2pdf()
+            .set(opt)
+            .from(clone)
+            .save()
+            .then(() => {
+                document.body.removeChild(clone);
+                btn.innerText = '📥 DOWNLOAD PDF';
+                btn.disabled  = false;
+            })
+            .catch((err) => {
+                console.error('PDF generation failed:', err);
+                document.body.removeChild(clone);
+                btn.innerText = '❌ Retry Download';
+                btn.disabled  = false;
+            });
+    }, 200);
+};
     // ─────────────────────────────────────────────────────────────────────
     // 6. NAVIGATION HELPERS
     // ─────────────────────────────────────────────────────────────────────
